@@ -8,7 +8,7 @@ using DD.Cloud.VersionManagement.DataAccess;
 namespace versionmanagement.Migrations
 {
     [DbContext(typeof(VersionManagementEntities))]
-    [Migration("20151122052747_Initialize")]
+    [Migration("20151122064108_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,27 @@ namespace versionmanagement.Migrations
                         .HasAnnotation("MaxLength", 30);
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 30);
+
+                    b.Property<int>("ProductId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+                {
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
                 });
         }
     }

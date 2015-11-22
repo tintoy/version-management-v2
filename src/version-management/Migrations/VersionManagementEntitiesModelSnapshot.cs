@@ -26,6 +26,27 @@ namespace versionmanagement.Migrations
 
                     b.HasKey("Id");
                 });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 30);
+
+                    b.Property<int>("ProductId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+                {
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+                });
         }
     }
 }

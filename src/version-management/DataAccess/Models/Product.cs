@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
 	/// <summary>
@@ -14,5 +16,10 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		///		The product name. 
 		/// </summary>
 		public string Name { get; set; }
+		
+		/// <summary>
+		///		The product's releases. 
+		/// </summary>
+		public ICollection<Release> Releases { get; set; } 
 	}
 }
