@@ -13,19 +13,22 @@ namespace DD.Cloud.VersionManagement
 	/// </summary>
     public sealed class Startup
     {
-        /// <summary>
+		/// <summary>
 		///		Add and configure services in the application container.
 		/// </summary>
-        public void ConfigureServices(IServiceCollection services)
+		/// <param name="services">
+		///		The application service container.
+		/// </param>
+		public void ConfigureServices(IServiceCollection services)
         {
 			if (services == null)
-				throw new ArgumentNullException("services");
-				
+				throw new ArgumentNullException(nameof(services));
+			
 			services.AddEntityFramework()
 				.AddSqlite()
 				.AddDbContext<VersionManagementEntities>(options => {
 					options.UseSqlite(
-						connectionString: "Data Source=VersionManagement2.db"
+						connectionString: "Data Source=../VersionManagement2.db"
 					);
 				});
 				
@@ -43,7 +46,7 @@ namespace DD.Cloud.VersionManagement
         public void Configure(IApplicationBuilder app)
         {
             if (app == null)
-				throw new ArgumentNullException("app");
+				throw new ArgumentNullException(nameof(app));
 
             app.UseMvcWithDefaultRoute();
         }

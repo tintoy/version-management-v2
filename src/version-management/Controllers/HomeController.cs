@@ -12,11 +12,6 @@ namespace DD.Cloud.VersionManagement.Controllers
 		: Controller
 	{
 		/// <summary>
-		///		The version-management entity context.
-		/// </summary>
-		readonly VersionManagementEntities _entities;
-		
-		/// <summary>
 		///		Create a new instance of the Home controller.
 		/// </summary>
 		/// <param name="entities">
@@ -25,9 +20,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		public HomeController(VersionManagementEntities entities)
 		{
 			if (entities == null)
-				throw new ArgumentNullException("entities");
-				
-			_entities = entities;
+				throw new ArgumentNullException(nameof(entities));
 		}
 		
 		/// <summary>
