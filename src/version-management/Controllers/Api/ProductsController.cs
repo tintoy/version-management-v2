@@ -49,6 +49,48 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			
 			return Ok(products);
 		}
+		
+		/// <summary>
+		///		Get a product by Id.
+		/// </summary>
+		/// <param name="productId">
+		///		The product Id.
+		/// </param>
+		[HttpGet("{productId:int?}")]
+		public IActionResult GetProductById([Required] int productId)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+				
+			Product matchingProduct = _entities.Products.FirstOrDefault(
+				product => product.Id == productId
+			);
+			if (matchingProduct != null)
+				return Ok(matchingProduct);
+				
+			return NotFound();
+		}
+		
+		/// <summary>
+		///		Get a product by name.
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		[HttpGet("named/{productName?}")]
+		public IActionResult GetProductByName([Required] string productName)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+				
+			Product matchingProduct = _entities.Products.FirstOrDefault(
+				product => product.Name == productName
+			);
+			if (matchingProduct != null)
+				return Ok(matchingProduct);
+				
+			return NotFound();
+		}
 
 		/// <summary>
 		///		Create a new product.
@@ -85,6 +127,33 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			await _entities.SaveChangesAsync();
 
 			return Ok(product);
+		}
+		
+		/// <summary>
+		///		Create a new product.
+		/// </summary>
+		/// <param name="name">
+		///		The product name.
+		/// </param>
+		/// <returns>
+		///		The product, or
+		/// </returns>
+	    [HttpDelete("{productId:int?}")]
+	    public async Task<IActionResult> DeleteProduct([Required] int productId)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			Product matchingProduct = _entities.Products.FirstOrDefault(
+				product => product.Id == productId
+			);
+			if (matchingProduct == null)
+				return NotFound();
+
+			_entities.Products.Remove(matchingProduct);
+			await _entities.SaveChangesAsync();
+
+			return Ok();
 		}
 	}
 }
