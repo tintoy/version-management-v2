@@ -53,17 +53,17 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		/// <summary>
 		///		Get a product by Id.
 		/// </summary>
-		/// <param name="productId">
+		/// <param name="id">
 		///		The product Id.
 		/// </param>
-		[HttpGet("{productId:int?}")]
-		public IActionResult GetProductById([Required] int productId)
+		[HttpGet("{id:int?}")]
+		public IActionResult GetProductById([Required, FromUri] int id)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 				
 			Product matchingProduct = _entities.Products.FirstOrDefault(
-				product => product.Id == productId
+				product => product.Id == id
 			);
 			if (matchingProduct != null)
 				return Ok(matchingProduct);
@@ -74,17 +74,17 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		/// <summary>
 		///		Get a product by name.
 		/// </summary>
-		/// <param name="productName">
+		/// <param name="name">
 		///		The product name.
 		/// </param>
-		[HttpGet("named/{productName?}")]
-		public IActionResult GetProductByName([Required] string productName)
+		[HttpGet("")]
+		public IActionResult GetProductByName([Required, FromQuery] string name)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 				
 			Product matchingProduct = _entities.Products.FirstOrDefault(
-				product => product.Name == productName
+				product => product.Name == name
 			);
 			if (matchingProduct != null)
 				return Ok(matchingProduct);
@@ -102,7 +102,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		///		The product, or
 		/// </returns>
 	    [HttpPost("")]
-	    public async Task<IActionResult> CreateProduct([Required] string name = null)
+	    public async Task<IActionResult> Create([Required, FromQuery] string name)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -130,6 +130,36 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 		
 		/// <summary>
+		///		Update an existing product.
+		/// </summary>
+		/// <param name="id">
+		///		The product Id.
+		/// </param>
+		/// <param name="name">
+		///		The product name.
+		/// </param>
+		/// <returns>
+		///		The product, or
+		/// </returns>
+	    [HttpPut("{id:int?}")]
+	    public async Task<IActionResult> Update([Required, FromUri] int id, [Required, FromQuery] string name)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			Product existingProduct = _entities.Products.FirstOrDefault(
+				matchingProduct => matchingProduct.Id == id
+			);
+			if (existingProduct == null)
+				return NotFound();
+
+			existingProduct.Name = name;
+			await _entities.SaveChangesAsync();
+
+			return Ok(existingProduct);
+		}
+		
+		/// <summary>
 		///		Create a new product.
 		/// </summary>
 		/// <param name="name">
@@ -138,14 +168,14 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		/// <returns>
 		///		The product, or
 		/// </returns>
-	    [HttpDelete("{productId:int?}")]
-	    public async Task<IActionResult> DeleteProduct([Required] int productId)
+	    [HttpDelete("{id:int?}")]
+	    public async Task<IActionResult> Delete([Required, FromUri] int id)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
 			Product matchingProduct = _entities.Products.FirstOrDefault(
-				product => product.Id == productId
+				product => product.Id == id
 			);
 			if (matchingProduct == null)
 				return NotFound();
