@@ -8,22 +8,13 @@ using DD.Cloud.VersionManagement.DataAccess;
 
 namespace DD.Cloud.VersionManagement
 {
-	/// <summary>
-	///		Configuration for the version-management application.
-	/// </summary>
     public sealed class Startup
     {
-		/// <summary>
-		///		Add and configure services in the application container.
-		/// </summary>
-		/// <param name="services">
-		///		The application service container.
-		/// </param>
 		public void ConfigureServices(IServiceCollection services)
         {
 			if (services == null)
 				throw new ArgumentNullException(nameof(services));
-			
+
 			services.AddEntityFramework()
 				.AddSqlite()
 				.AddDbContext<VersionManagementEntities>(options => {
@@ -31,32 +22,30 @@ namespace DD.Cloud.VersionManagement
 						connectionString: "Data Source=../VersionManagement2.db"
 					);
 				});
-				
+
 			services.AddMvc()
 				.AddJsonOptions(json => {
 					json.SerializerSettings.Converters.Add(
 						new StringEnumConverter()
 					);
-				}); 
+				});
         }
 
-        /// <summary>
-		///		Configure the HTTP request pipeline.
-		/// </summary>
         public void Configure(IApplicationBuilder app)
         {
             if (app == null)
 				throw new ArgumentNullException(nameof(app));
 
+			// Ensure database is created / upgraded at startup.
+			using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			{
+				serviceScope.ServiceProvider.GetService<VersionManagementEntities>()
+					.Database.Migrate();
+			}
+
             app.UseMvcWithDefaultRoute();
         }
 
-        /// <summary>
-		///		The main program entry-point.
-		/// </summary>
-		/// <param name="args">
-		///		Command-line arguments.
-		/// </param>
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
     }
 }

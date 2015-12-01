@@ -7,19 +7,10 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 	/// </summary>
 	public sealed class Product
 	{
-		/// <summary>
-		///		The product Id. 
-		/// </summary>
 		public int Id { get; set; }
 		
-		/// <summary>
-		///		The product name. 
-		/// </summary>
 		public string Name { get; set; }
 		
-		/// <summary>
-		///		The product's releases. 
-		/// </summary>
 		public ICollection<Release> Releases { get; set; } 
 	}
 }
