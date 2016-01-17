@@ -8,9 +8,10 @@ using DD.Cloud.VersionManagement.DataAccess;
 namespace versionmanagement.Migrations
 {
     [DbContext(typeof(VersionManagementEntities))]
-    partial class VersionManagementEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20160118200910_InitialDatabase")]
+    partial class InitialDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");

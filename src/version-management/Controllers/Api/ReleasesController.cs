@@ -8,13 +8,13 @@ using System.Web.Http;
 
 namespace DD.Cloud.VersionManagement.Controllers.Api
 {
-    using DataAccess;
-    using DataAccess.Models;
+	using DataAccess;
+	using DataAccess.Models;
 
-    [Route("api/v1/releases")]
-    public class ReleasesController
+	[Route("api/v1/releases")]
+	public class ReleasesController
 		: ApiController
-    {
+	{
 		readonly VersionManagementEntities _entities;
 
 		public ReleasesController(VersionManagementEntities entities)
@@ -64,7 +64,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpPost("")]
-	    public async Task<IActionResult> Create([Required] int productId, [Required] string name = null)
+		public async Task<IActionResult> Create([Required] int productId, [Required] string name = null)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -93,7 +93,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpPut("{id:int?}")]
-	    public async Task<IActionResult> Update([Required] int id, [Required] string name = null)
+		public async Task<IActionResult> Update([Required] int id, [Required] string name = null)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -111,7 +111,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpDelete("{id:int?}")]
-	    public async Task<IActionResult> Delete([Required, FromUri] int id)
+		public async Task<IActionResult> Delete([Required, FromUri] int id)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -127,5 +127,5 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 
 			return Ok();
 		}
-    }
+	}
 }
