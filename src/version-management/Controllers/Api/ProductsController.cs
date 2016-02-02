@@ -10,7 +10,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	using DataAccess;
     using DataAccess.Models;
 
-	[Route("api/v1/products")]
+	[Route("api/v2/products")]
 	public class ProductsController
 		: ApiController
 	{
