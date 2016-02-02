@@ -14,7 +14,7 @@ namespace versionmanagement.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +31,11 @@ namespace versionmanagement.Migrations
                     EndVersionMinor = table.Column<int>(nullable: false),
                     EndVersionRevision = table.Column<int>(nullable: false),
                     IncrementBy = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    NextVersionBuild = table.Column<int>(nullable: false),
+                    NextVersionMajor = table.Column<int>(nullable: false),
+                    NextVersionMinor = table.Column<int>(nullable: false),
+                    NextVersionRevision = table.Column<int>(nullable: false),
                     StartVersionBuild = table.Column<int>(nullable: false),
                     StartVersionMajor = table.Column<int>(nullable: false),
                     StartVersionMinor = table.Column<int>(nullable: false),
@@ -46,7 +51,7 @@ namespace versionmanagement.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
                     VersionRangeId = table.Column<int>(nullable: false),
                     VersionSuffix = table.Column<string>(nullable: true)

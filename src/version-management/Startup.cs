@@ -8,32 +8,34 @@ using DD.Cloud.VersionManagement.DataAccess;
 
 namespace DD.Cloud.VersionManagement
 {
-    public sealed class Startup
-    {
+	public sealed class Startup
+	{
 		public void ConfigureServices(IServiceCollection services)
-        {
+		{
 			if (services == null)
 				throw new ArgumentNullException(nameof(services));
 
 			services.AddEntityFramework()
 				.AddSqlite()
-				.AddDbContext<VersionManagementEntities>(options => {
+				.AddDbContext<VersionManagementEntities>(options =>
+				{
 					options.UseSqlite(
 						connectionString: "Data Source=../VersionManagement2.db"
 					);
 				});
 
 			services.AddMvc()
-				.AddJsonOptions(json => {
+				.AddJsonOptions(json =>
+				{
 					json.SerializerSettings.Converters.Add(
 						new StringEnumConverter()
 					);
 				});
-        }
+		}
 
-        public void Configure(IApplicationBuilder app)
-        {
-            if (app == null)
+		public void Configure(IApplicationBuilder app)
+		{
+			if (app == null)
 				throw new ArgumentNullException(nameof(app));
 
 			// Ensure database is created / upgraded at startup.
@@ -43,9 +45,9 @@ namespace DD.Cloud.VersionManagement
 					.Database.Migrate();
 			}
 
-            app.UseMvcWithDefaultRoute();
-        }
+			app.UseMvcWithDefaultRoute();
+		}
 
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-    }
+		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+	}
 }

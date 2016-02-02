@@ -8,7 +8,7 @@ using DD.Cloud.VersionManagement.DataAccess;
 namespace versionmanagement.Migrations
 {
     [DbContext(typeof(VersionManagementEntities))]
-    [Migration("20160117061233_InitialCreate")]
+    [Migration("20160202093023_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,8 @@ namespace versionmanagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
                 });
@@ -31,7 +32,8 @@ namespace versionmanagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<int>("ProductId");
 
@@ -56,6 +58,17 @@ namespace versionmanagement.Migrations
                     b.Property<int>("EndVersionRevision");
 
                     b.Property<int>("IncrementBy");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("NextVersionBuild");
+
+                    b.Property<int>("NextVersionMajor");
+
+                    b.Property<int>("NextVersionMinor");
+
+                    b.Property<int>("NextVersionRevision");
 
                     b.Property<int>("StartVersionBuild");
 
