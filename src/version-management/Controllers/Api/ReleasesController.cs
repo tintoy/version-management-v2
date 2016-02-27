@@ -49,7 +49,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpGet("")]
-		public IActionResult GetReleaseByName([Required] string productName = null, [Required] string name = null)
+		public IActionResult GetReleaseByName([Required] string productName, [Required] string name)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -74,7 +74,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			);
 			if (Release != null)
 			{
-				Context.Response.Headers.Add("Reason",
+				Context.Response.Headers.Add("X-Reason",
 					$"Release named '{name}' already exists for ProductId '{productId}'."
 				);
 

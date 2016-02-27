@@ -48,7 +48,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpGet("")]
-		public IActionResult GetProductByName([Required] string name = null)
+		public IActionResult GetProductByName([Required] string name)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
@@ -73,7 +73,10 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			);
 			if (product != null)
 			{
-				Context.Response.Headers.Add("Reason",
+				Context.Response.Headers.Add("X-ErrorCode",
+					"EntityAlreadyExists"
+				);
+				Context.Response.Headers.Add("X-Reason",
 					$"Product named '{name}' already exists."
 				);
 

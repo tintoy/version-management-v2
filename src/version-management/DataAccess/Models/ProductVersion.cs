@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
-	public sealed class BuildVersion
+	public sealed class ProductVersion
     {
-		public BuildVersion()
+		public ProductVersion()
 		{
 		}
 
-		public BuildVersion(Release release, string commitId, Version nextVersion)
+		public ProductVersion(Release release, string commitId, Version nextVersion)
 		{
 			if (release == null)
 				throw new ArgumentNullException(nameof(release));
@@ -27,7 +27,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			VersionMinor = nextVersion.Minor;
 			VersionBuild = nextVersion.Build;
 			VersionRevision = nextVersion.Revision;
-			VersionSuffix = release.VersionSuffix;
+			SpecialVersion = release.SpecialVersion;
 		}
 
 		public string CommitId { get; set; }
@@ -39,7 +39,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 
 		[Required]
 		public int VersionMinor { get; set; }
-
+		
 		[Required]
 		public int VersionBuild { get; set; }
 
@@ -47,8 +47,16 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		public int VersionRevision { get; set; }
 
 		[Required]
-		public string VersionSuffix { get; set; }
+		public string SpecialVersion { get; set; }
 
 		public Release Release { get; set; }
+
+		public string ToSemanticVersion()
+		{
+			return String.Format("{0}-{1}",
+				new Version(VersionMajor, VersionMinor, VersionBuild, VersionRevision),
+				SpecialVersion
+			);
+		}
 	}
 }

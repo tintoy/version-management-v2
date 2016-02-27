@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 
-namespace versionmanagement.Migrations
+namespace DD.Cloud.VersionManagement.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -19,6 +19,8 @@ namespace versionmanagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
+
+					table.UniqueConstraint("Unique_Product_Name", product => product.Name);
                 });
             migrationBuilder.CreateTable(
                 name: "VersionRange",
@@ -53,52 +55,54 @@ namespace versionmanagement.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    VersionRangeId = table.Column<int>(nullable: false),
-                    VersionSuffix = table.Column<string>(nullable: true)
+                    SpecialVersion = table.Column<string>(nullable: true),
+                    VersionRangeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Release", x => x.Id);
+                    table.PrimaryKey("PK_Release", release => release.Id);
                     table.ForeignKey(
                         name: "FK_Release_Product_ProductId",
-                        column: x => x.ProductId,
+                        column: release => release.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Release_VersionRange_VersionRangeId",
-                        column: x => x.VersionRangeId,
+                        column: release => release.VersionRangeId,
                         principalTable: "VersionRange",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+
+					table.UniqueConstraint("Unique_Release_Name", release => release.Name);
+				});
             migrationBuilder.CreateTable(
-                name: "BuildVersion",
+                name: "ProductVersion",
                 columns: table => new
                 {
                     CommitId = table.Column<string>(nullable: false),
                     ReleaseId = table.Column<int>(nullable: false),
+                    SpecialVersion = table.Column<string>(nullable: false),
                     VersionBuild = table.Column<int>(nullable: false),
                     VersionMajor = table.Column<int>(nullable: false),
                     VersionMinor = table.Column<int>(nullable: false),
-                    VersionRevision = table.Column<int>(nullable: false),
-                    VersionSuffix = table.Column<string>(nullable: false)
+                    VersionRevision = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BuildVersion", x => new { x.CommitId, x.ReleaseId });
+                    table.PrimaryKey("PK_ProductVersion", productVersion => new { productVersion.CommitId, productVersion.ReleaseId });
                     table.ForeignKey(
-                        name: "FK_BuildVersion_Release_ReleaseId",
+                        name: "FK_ProductVersion_Release_ReleaseId",
                         column: x => x.ReleaseId,
                         principalTable: "Release",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+				});
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("BuildVersion");
+            migrationBuilder.DropTable("ProductVersion");
             migrationBuilder.DropTable("Release");
             migrationBuilder.DropTable("Product");
             migrationBuilder.DropTable("VersionRange");
