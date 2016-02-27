@@ -6,7 +6,6 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
 	public sealed class Product
 	{
-		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; set; }
 
 		[Required]

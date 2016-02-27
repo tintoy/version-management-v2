@@ -6,9 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
-	public class VersionRange
+	public sealed class VersionRange
 	{
-		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public VersionRange()
+		{
+		}
+
 		public int Id { get; set; }
 
 		[Required]
@@ -54,7 +57,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		[Required]
 		public int EndVersionRevision { get; set; }
 
-		public ICollection<Release> Releases { get; set; }
+		public ICollection<Release> Releases { get; set; } = new HashSet<Release>();
 
 		[NotMapped]
 		public Version StartVersion
@@ -155,24 +158,36 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			{
 				case VersionComponent.Major:
 				{
+					if (NextVersionMajor >= EndVersionMajor)
+						throw new VersionManagementException("The next major version number for range '{0}' is {1}, which would exceed the maximum value for this version range.", Name, NextVersionMajor);
+
 					NextVersionMajor++;
 
 					break;
 				}
 				case VersionComponent.Minor:
 				{
+					if (NextVersionMinor >= EndVersionMinor)
+						throw new VersionManagementException("The next minor version number for range '{0}' is {1}, which would exceed the maximum value for this version range.", Name, NextVersionMinor);
+
 					NextVersionMinor++;
 
 					break;
 				}
 				case VersionComponent.Build:
 				{
+					if (NextVersionBuild >= EndVersionBuild)
+						throw new VersionManagementException("The next build number for range '{0}' is {1}, which would exceed the maximum value for this version range.", Name, NextVersionBuild);
+
 					NextVersionBuild++;
 
 					break;
 				}
 				case VersionComponent.Revision:
 				{
+					if (NextVersionRevision >= EndVersionRevision)
+						throw new VersionManagementException("The next revision number for range '{0}' is {1}, which would exceed the maximum value for this version range.", Name, EndVersionRevision);
+
 					NextVersionRevision++;
 
 					break;

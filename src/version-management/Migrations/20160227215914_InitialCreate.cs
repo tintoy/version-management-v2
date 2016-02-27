@@ -72,10 +72,33 @@ namespace versionmanagement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.CreateTable(
+                name: "BuildVersion",
+                columns: table => new
+                {
+                    CommitId = table.Column<string>(nullable: false),
+                    ReleaseId = table.Column<int>(nullable: false),
+                    VersionBuild = table.Column<int>(nullable: false),
+                    VersionMajor = table.Column<int>(nullable: false),
+                    VersionMinor = table.Column<int>(nullable: false),
+                    VersionRevision = table.Column<int>(nullable: false),
+                    VersionSuffix = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BuildVersion", x => new { x.CommitId, x.ReleaseId });
+                    table.ForeignKey(
+                        name: "FK_BuildVersion_Release_ReleaseId",
+                        column: x => x.ReleaseId,
+                        principalTable: "Release",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable("BuildVersion");
             migrationBuilder.DropTable("Release");
             migrationBuilder.DropTable("Product");
             migrationBuilder.DropTable("VersionRange");

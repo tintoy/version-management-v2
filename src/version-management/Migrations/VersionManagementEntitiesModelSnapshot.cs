@@ -15,6 +15,26 @@ namespace versionmanagement.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
 
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.BuildVersion", b =>
+                {
+                    b.Property<string>("CommitId");
+
+                    b.Property<int>("ReleaseId");
+
+                    b.Property<int>("VersionBuild");
+
+                    b.Property<int>("VersionMajor");
+
+                    b.Property<int>("VersionMinor");
+
+                    b.Property<int>("VersionRevision");
+
+                    b.Property<string>("VersionSuffix")
+                        .IsRequired();
+
+                    b.HasKey("CommitId", "ReleaseId");
+                });
+
             modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -78,6 +98,13 @@ namespace versionmanagement.Migrations
                     b.Property<int>("StartVersionRevision");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.BuildVersion", b =>
+                {
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Release")
+                        .WithMany()
+                        .HasForeignKey("ReleaseId");
                 });
 
             modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
