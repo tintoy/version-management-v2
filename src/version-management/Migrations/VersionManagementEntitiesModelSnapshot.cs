@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
 using DD.Cloud.VersionManagement.DataAccess;
 
-namespace DD.Cloud.VersionManagement.Migrations
+namespace versionmanagement.Migrations
 {
     [DbContext(typeof(VersionManagementEntities))]
     partial class VersionManagementEntitiesModelSnapshot : ModelSnapshot
@@ -26,7 +26,24 @@ namespace DD.Cloud.VersionManagement.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ProductVersion", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<string>("SpecialVersion");
+
+                    b.Property<int>("VersionRangeId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersion", b =>
                 {
                     b.Property<string>("CommitId");
 
@@ -44,23 +61,6 @@ namespace DD.Cloud.VersionManagement.Migrations
                     b.Property<int>("VersionRevision");
 
                     b.HasKey("CommitId", "ReleaseId");
-                });
-
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<string>("SpecialVersion");
-
-                    b.Property<int>("VersionRangeId");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.VersionRange", b =>
@@ -100,13 +100,6 @@ namespace DD.Cloud.VersionManagement.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ProductVersion", b =>
-                {
-                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Release")
-                        .WithMany()
-                        .HasForeignKey("ReleaseId");
-                });
-
             modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
                 {
                     b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Product")
@@ -116,6 +109,13 @@ namespace DD.Cloud.VersionManagement.Migrations
                     b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.VersionRange")
                         .WithMany()
                         .HasForeignKey("VersionRangeId");
+                });
+
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersion", b =>
+                {
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Release")
+                        .WithMany()
+                        .HasForeignKey("ReleaseId");
                 });
         }
     }

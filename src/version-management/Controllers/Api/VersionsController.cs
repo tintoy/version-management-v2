@@ -21,8 +21,8 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			_entities = entities;
 		}
 
-		[HttpGet("{productName}/{releaseName}/{commitId}")]
-		public IActionResult GetVersion(string productName, string releaseName, string commitId)
+		[HttpGet("")]
+		public IActionResult GetVersion(string productName = null, string releaseName = null, string commitId = null)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				return BadRequest("Must specify a valid product name.");
@@ -33,15 +33,15 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ProductVersion buildVersion = _entities.GetBuildVersion(productName, releaseName, commitId);
-			if (buildVersion != null)
+			ReleaseVersion releaseVersion = _entities.GetReleaseVersion(productName, releaseName, commitId);
+			if (releaseVersion != null)
 			{
 				return Ok(new
 				{
 					ProductName = productName,
 					ReleaseName = releaseName,
 					CommitId = commitId,
-					Version = buildVersion.ToSemanticVersion()
+					Version = releaseVersion.ToSemanticVersion()
 				});
 			}
 			
@@ -55,8 +55,8 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			});
 		}
 
-		[HttpPost("{productName}/{releaseName}/{commitId}")]
-		public IActionResult CreateVersion(string productName, string releaseName, string commitId)
+		[HttpPost("")]
+		public IActionResult CreateVersion(string productName = null, string releaseName = null, string commitId = null)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				return BadRequest("Must specify a valid product name.");
@@ -67,14 +67,14 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ProductVersion buildVersion = _entities.GetOrCreateBuildVersion(productName, releaseName, commitId);
+			ReleaseVersion releaseVersion = _entities.GetOrCreateReleaseVersion(productName, releaseName, commitId);
 
 			return Ok(new
 			{
 				ProductName = productName,
 				ReleaseName = releaseName,
 				CommitId = commitId,
-				Version = buildVersion.ToSemanticVersion()
+				Version = releaseVersion.ToSemanticVersion()
 			});
 		}
 

@@ -25,36 +25,37 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpGet("")]
-		public IActionResult GetAllProducts()
+		public IActionResult Get(string productName)
 		{
-			Product[] products = _entities.Products.ToArray();
+			if (String.IsNullOrWhiteSpace(productName))
+			{
+				Product[] products = _entities.Products.ToArray();
 
-			return Ok(products);
+				return Ok(products);
+			}
+
+			Product productByName = _entities.Products.FirstOrDefault(
+				product => product.Name == productName
+			);
+			if (productByName != null)
+				return Ok(productByName);
+
+			return EntityNotFound(new
+			{
+				Message = $"No entity was found named '{productName}'.",
+				ProductName = productName,
+				ErrorCode = "EntityNotFound"
+			});
 		}
 
-		[HttpGet("{id:int?}")]
-		public IActionResult GetProductById([Required] int id)
+		[HttpGet("{id:int}")]
+		public IActionResult GetById([Required] int id)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
 			Product matchingProduct = _entities.Products.FirstOrDefault(
 				product => product.Id == id
-			);
-			if (matchingProduct != null)
-				return Ok(matchingProduct);
-
-			return NotFound();
-		}
-
-		[HttpGet("")]
-		public IActionResult GetProductByName([Required] string name)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
-
-			Product matchingProduct = _entities.Products.FirstOrDefault(
-				product => product.Name == name
 			);
 			if (matchingProduct != null)
 				return Ok(matchingProduct);
@@ -127,6 +128,13 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			await _entities.SaveChangesAsync();
 
 			return Ok();
+		}
+
+		HttpNotFoundObjectResult EntityNotFound<TBody>(TBody body)
+		{
+			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
+
+			return new HttpNotFoundObjectResult(body);
 		}
 	}
 }

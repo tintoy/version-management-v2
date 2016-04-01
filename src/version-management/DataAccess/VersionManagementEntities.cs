@@ -19,11 +19,11 @@ namespace DD.Cloud.VersionManagement.DataAccess
 
 		public DbSet<Release> Releases { get; set; }
 
-		public DbSet<ProductVersion> BuildVersions { get; set; }
+		public DbSet<ReleaseVersion> ReleaseVersions { get; set; }
 
 		public DbSet<VersionRange> VersionRanges { get; set; }
 
-		public ProductVersion GetBuildVersion(string productName, string releaseName, string commitId)
+		public ReleaseVersion GetReleaseVersion(string productName, string releaseName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -48,7 +48,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingRelease == null)
 				throw new VersionManagementException("Release not found: '{0}'.", releaseName);
 
-			ProductVersion matchingVersion = BuildVersions.FirstOrDefault(version =>
+			ReleaseVersion matchingVersion = ReleaseVersions.FirstOrDefault(version =>
 				version.ReleaseId == matchingRelease.Id
 				&&
 				version.CommitId == commitId
@@ -57,16 +57,16 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			return matchingVersion;
 		}
 
-		public ProductVersion GetOrCreateBuildVersion(string commitId, string productName, string releaseName)
+		public ReleaseVersion GetOrCreateReleaseVersion(string productName, string releaseName, string commitId)
 		{
-			if (String.IsNullOrWhiteSpace(commitId))
-				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
-
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
 
 			if (String.IsNullOrWhiteSpace(releaseName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'releaseName'.", nameof(releaseName));
+
+			if (String.IsNullOrWhiteSpace(commitId))
+				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
 
 			Product matchingProduct = Products.FirstOrDefault(product =>
 				product.Name == productName
@@ -74,15 +74,17 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingProduct == null)
 				throw new VersionManagementException("Product not found: '{0}'.", productName);
 
-			Release matchingRelease = Releases.FirstOrDefault(release =>
-				release.ProductId == matchingProduct.Id
-				&&
-				release.Name == releaseName
-			);
+			Release matchingRelease =
+				Releases.Include(release => release.VersionRange)
+					.FirstOrDefault(release =>
+						release.ProductId == matchingProduct.Id
+						&&
+						release.Name == releaseName
+					);
 			if (matchingRelease == null)
 				throw new VersionManagementException("Release not found: '{0}'.", releaseName);
 
-			ProductVersion matchingVersion = BuildVersions.FirstOrDefault(version =>
+			ReleaseVersion matchingVersion = ReleaseVersions.FirstOrDefault(version =>
 				version.ReleaseId == matchingRelease.Id
 				&&
 				version.CommitId == commitId
@@ -90,15 +92,15 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingVersion != null)
 				return matchingVersion;
 
-			ProductVersion newVersion = matchingRelease.AllocateBuildVersion(commitId);
-			BuildVersions.Add(newVersion);
+			ReleaseVersion newVersion = matchingRelease.AllocateReleaseVersion(commitId);
+			ReleaseVersions.Add(newVersion);
 
 			SaveChanges();
 
 			return newVersion;
 		}
 
-		public ProductVersion[] GetProductVersionsFromCommitId(string productName, string commitId)
+		public ReleaseVersion[] GetProductVersionsFromCommitId(string productName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -107,7 +109,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
 
 			return
-				BuildVersions.Where(buildVersion =>
+				ReleaseVersions.Where(buildVersion =>
 					buildVersion.Release.Product.Name == productName
 					&&
 					buildVersion.CommitId == commitId
@@ -115,7 +117,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 				.ToArray();
 		}
 
-		public ProductVersion[] GetProductVersionsFromSemanticVersion(string productName, string semanticVersion)
+		public ReleaseVersion[] GetProductVersionsFromSemanticVersion(string productName, string semanticVersion)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -131,7 +133,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			string specialVersion = versionComponents.Length == 2 ? versionComponents[1] : String.Empty;
 
 			return
-				BuildVersions.Where(buildVersion =>
+				ReleaseVersions.Where(buildVersion =>
 					buildVersion.Release.Product.Name == productName
 					&&
 					buildVersion.VersionMajor == version.Major
@@ -163,11 +165,11 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			var versionRangeEntity = modelBuilder.Entity<VersionRange>();
 			versionRangeEntity.HasKey(versionRange => versionRange.Id);
 
-			var buildVersionEntity = modelBuilder.Entity<ProductVersion>();
-			buildVersionEntity.HasKey(buildVersion => new
+			var releaseVersionEntity = modelBuilder.Entity<ReleaseVersion>();
+			releaseVersionEntity.HasKey(releaseVersion => new
 			{
-				buildVersion.CommitId,
-				buildVersion.ReleaseId
+				releaseVersion.CommitId,
+				releaseVersion.ReleaseId
 			});
 		}
 	}

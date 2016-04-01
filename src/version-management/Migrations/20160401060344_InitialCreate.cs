@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 
-namespace DD.Cloud.VersionManagement.Migrations
+namespace versionmanagement.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -19,8 +19,6 @@ namespace DD.Cloud.VersionManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
-
-					table.UniqueConstraint("Unique_Product_Name", product => product.Name);
                 });
             migrationBuilder.CreateTable(
                 name: "VersionRange",
@@ -60,24 +58,22 @@ namespace DD.Cloud.VersionManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Release", release => release.Id);
+                    table.PrimaryKey("PK_Release", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Release_Product_ProductId",
-                        column: release => release.ProductId,
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Release_VersionRange_VersionRangeId",
-                        column: release => release.VersionRangeId,
+                        column: x => x.VersionRangeId,
                         principalTable: "VersionRange",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-
-					table.UniqueConstraint("Unique_Release_Name", release => release.Name);
-				});
+                });
             migrationBuilder.CreateTable(
-                name: "ProductVersion",
+                name: "ReleaseVersion",
                 columns: table => new
                 {
                     CommitId = table.Column<string>(nullable: false),
@@ -90,19 +86,19 @@ namespace DD.Cloud.VersionManagement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductVersion", productVersion => new { productVersion.CommitId, productVersion.ReleaseId });
+                    table.PrimaryKey("PK_ReleaseVersion", x => new { x.CommitId, x.ReleaseId });
                     table.ForeignKey(
-                        name: "FK_ProductVersion_Release_ReleaseId",
+                        name: "FK_ReleaseVersion_Release_ReleaseId",
                         column: x => x.ReleaseId,
                         principalTable: "Release",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-				});
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ProductVersion");
+            migrationBuilder.DropTable("ReleaseVersion");
             migrationBuilder.DropTable("Release");
             migrationBuilder.DropTable("Product");
             migrationBuilder.DropTable("VersionRange");

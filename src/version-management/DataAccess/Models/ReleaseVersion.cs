@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
-	public sealed class ProductVersion
+	public sealed class ReleaseVersion
     {
-		public ProductVersion()
+		public ReleaseVersion()
 		{
 		}
 
-		public ProductVersion(Release release, string commitId, Version nextVersion)
+		public ReleaseVersion(Release release, string commitId, Version nextVersion)
 		{
 			if (release == null)
 				throw new ArgumentNullException(nameof(release));

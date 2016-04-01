@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
@@ -11,6 +10,6 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		[Required]
 		public string Name { get; set; }
 
-		public ICollection<Release> Releases { get; set; }
+		public ICollection<Release> Releases { get; set; } = new HashSet<Release>();
 	}
 }

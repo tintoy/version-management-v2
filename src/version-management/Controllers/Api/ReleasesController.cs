@@ -11,7 +11,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	using DataAccess;
 	using DataAccess.Models;
 
-	[Route("api/v1/releases")]
+	[Route("api/v2/releases")]
 	public class ReleasesController
 		: ApiController
 	{
@@ -26,14 +26,35 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		[HttpGet("")]
-		public IActionResult GetAllReleases()
+		public IActionResult Get([Required] string productName, string releaseName = null)
 		{
-			Release[] Releases = _entities.Releases.ToArray();
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
 
-			return Ok(Releases);
+			Release[] releases;
+			if (!String.IsNullOrWhiteSpace(releaseName))
+			{
+				releases =
+					_entities.Releases.Where(release =>
+						release.Product.Name == productName
+						&&
+						release.Name == releaseName
+					)
+					.ToArray();
+			}
+			else
+			{
+				releases =
+					_entities.Releases.Where(release =>
+						release.Product.Name == productName
+					)
+					.ToArray();
+			}
+
+			return Ok(releases);
 		}
 
-		[HttpGet("{id:int?}")]
+		[HttpGet("{id:int}")]
 		public IActionResult GetReleaseById([Required] int id)
 		{
 			if (!ModelState.IsValid)
@@ -47,22 +68,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 
 			return NotFound();
 		}
-
-		[HttpGet("")]
-		public IActionResult GetReleaseByName([Required] string productName, [Required] string name)
-		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
-
-			Release matchingRelease = _entities.Releases.FirstOrDefault(
-				release => release.Name == name && release.Product.Name == productName
-			);
-			if (matchingRelease != null)
-				return Ok(matchingRelease);
-
-			return NotFound();
-		}
-
+		
 		[HttpPost("")]
 		public async Task<IActionResult> Create([Required] int productId, [Required] string name = null)
 		{
@@ -126,6 +132,13 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			await _entities.SaveChangesAsync();
 
 			return Ok();
+		}
+
+		HttpNotFoundObjectResult EntityNotFound<TBody>(TBody body)
+		{
+			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
+
+			return new HttpNotFoundObjectResult(body);
 		}
 	}
 }

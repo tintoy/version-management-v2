@@ -152,8 +152,10 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			}
 		}
 
-		public Version Increment()
+		public Version GetAndIncrement()
 		{
+			Version nextVersion = NextVersion;
+
 			switch (IncrementBy)
 			{
 				case VersionComponent.Major:
@@ -194,11 +196,11 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 				}
 				default:
 				{
-				  throw new InvalidOperationException($"InvalidOperationException value for VersionRange.IncrementBy: {IncrementBy}.");
+					throw new InvalidOperationException($"InvalidOperationException value for VersionRange.IncrementBy: {IncrementBy}.");
 				}
 			}
 
-			return NextVersion;
+			return nextVersion;
 		}
 
 		public override string ToString() => $"{Name} ({StartVersion}-{EndVersion}, Next={NextVersion})";

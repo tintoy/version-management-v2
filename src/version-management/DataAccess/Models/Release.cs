@@ -31,9 +31,9 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 
 		public VersionRange VersionRange { get; set; }
 
-		public ICollection<ProductVersion> BuildVersions { get; set; } = new HashSet<ProductVersion>();
+		public ICollection<ReleaseVersion> BuildVersions { get; set; } = new HashSet<ReleaseVersion>();
 
-		public ProductVersion AllocateBuildVersion(string commitId)
+		public ReleaseVersion AllocateReleaseVersion(string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(commitId))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
@@ -41,12 +41,12 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			if (VersionRange == null)
 				throw new InvalidOperationException("VersionRange is null.");
 
-			Version nextVersion = VersionRange.Increment();
+			Version nextVersion = VersionRange.GetAndIncrement();
 
-			ProductVersion buildVersion = new ProductVersion(this, commitId, nextVersion);
-			BuildVersions.Add(buildVersion);
+			ReleaseVersion releaseVersion = new ReleaseVersion(this, commitId, nextVersion);
+			BuildVersions.Add(releaseVersion);
 
-			return buildVersion;
+			return releaseVersion;
 		}
 	}
 }
