@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0-alpha",
-  "compilationOptions": {
-    "emitEntryPoint": true
-  },
-  "tooling": {
-    "defaultNamespace": "DD.Cloud.VersionManagement"
-  },
+    "version": "1.0.0-alpha",
+    "compilationOptions": {
+        "emitEntryPoint": true
+    },
+    "tooling": {
+        "defaultNamespace": "DD.Cloud.VersionManagement"
+    },
 
     "dependencies": {
         "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
@@ -17,21 +17,25 @@
         "EntityFramework.SQLite": "7.0.0-rc1-final"
     },
 
-  "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel",
-	"ef": "EntityFramework.Commands"
-  },
+    "commands": {
+        "web": "Microsoft.AspNet.Server.Kestrel",
+        "ef": "EntityFramework.Commands"
+    },
 
-  "frameworks": {
-    "dnxcore50": { }
-  },
+    "scripts": {
+        "first-run": "npm install"
+    },
 
-  "exclude": [
-    "wwwroot",
-    "node_modules"
-  ],
-  "publishExclude": [
-    "**.user",
-    "**.vspscc"
-  ]
+    "frameworks": {
+        "dnxcore50": { }
+    },
+
+    "exclude": [
+        "wwwroot",
+        "node_modules"
+    ],
+    "publishExclude": [
+        "**.user",
+        "**.vspscc"
+    ]
 }
