@@ -19,8 +19,12 @@
 				@foreach (Product product in Model)
 				{
 					<tr>
-						<td>@Html.ActionLink(product.Name, "DetailById", new { productId = product.Id })</td>
-						<td>@Html.ActionLink("Releases", "IndexByProduct", "Releases", new { productId = product.Id })</td>
+						<td>
+							<a asp-action="DetailById" asp-route-productId="@product.Id">@product.Name</a>
+						</td>
+						<td>
+							<a asp-action="IndexByProduct" asp-controller="Releases" asp-route-productId="@product.Id">Releases</a>
+						</td>
 					</tr>
 				}
 			</tbody>

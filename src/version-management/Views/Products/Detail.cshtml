@@ -18,7 +18,9 @@
 				</div>
 				<div class="form-group">
 					<label for="productReleases">Release</label>
-					<div id="productReleases">@Html.ActionLink("Releases", "IndexByProduct", "Releases", new { productId = @Model.Id })</div>
+					<div id="productReleases">
+						<a asp-controller="Releases" asp-action="IndexByProduct" asp-route-productId="@Model.Id">Releases</a>
+					</div>
 				</div>
 			</fieldset>
 		</form>
