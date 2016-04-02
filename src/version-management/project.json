@@ -13,13 +13,15 @@
         "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
         "Microsoft.AspNet.Mvc.WebApiCompatShim": "6.0.0-rc1-final",
         "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+        "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
         "EntityFramework.Commands": "7.0.0-rc1-final",
         "EntityFramework.SQLite": "7.0.0-rc1-final"
     },
 
     "commands": {
         "web": "Microsoft.AspNet.Server.Kestrel",
-        "ef": "EntityFramework.Commands"
+        "ef": "EntityFramework.Commands",
+        "gen": "Microsoft.Extensions.CodeGeneration"
     },
 
     "scripts": {
