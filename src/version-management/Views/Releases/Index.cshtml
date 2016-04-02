@@ -1,0 +1,34 @@
+﻿@using DD.Cloud.VersionManagement.DataAccess.Models
+@model IEnumerable<Release>
+
+@{
+	ViewBag.Title = "Releases";
+}
+
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Product</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (Release release in Model)
+				{
+					<tr>
+						<td>
+							<a asp-action="DetailById" asp-route-releaseId="@release.Id">@release.Name</a>
+						</td>
+						<td>
+							<a asp-action="DetailById" asp-controller="Products" asp-route-productId="@release.ProductId">@release.Product.Name</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+

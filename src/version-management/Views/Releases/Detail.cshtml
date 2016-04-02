@@ -1,0 +1,27 @@
+﻿@using DD.Cloud.VersionManagement.DataAccess.Models
+@model Release
+
+@{
+	ViewBag.Title = "Release - " + @Model.Name;
+}
+
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<form role="form">
+			<fieldset>
+				<legend>Release "@Model.Name"</legend>
+				<div class="form-group">
+					<label for="releaseName">Name</label>
+					<div id="releaseName">@Model.Name</div>
+				</div>
+				<div class="form-group">
+					<label for="releaseProduct">Product</label>
+					<div id="releaseProduct">
+						<a asp-controller="Products" asp-action="DetailById" asp-route-productId="@Model.Id">@Model.Product.Name</a>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
