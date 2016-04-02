@@ -33,7 +33,23 @@ namespace DD.Cloud.VersionManagement.Controllers
             return View(releases);
         }
 
-		[Route("product/{productId:int}", Name = "ByProduct")]
+		[Route("{releaseId:int}")]
+		public IActionResult ById(int releaseId)
+		{
+			Release releaseById =
+				_entities.Releases.Include(
+					release => release.Product
+				)
+				.FirstOrDefault(
+					release => release.Id == releaseId
+				);
+			if (releaseById == null)
+				return HttpNotFound($"Release {releaseId} not found.");
+
+			return View("Detail", releaseById);
+		}
+
+		[Route("product/{productId:int}")]
 		public IActionResult ByProduct(int productId)
 		{
 			Release[] releasesByProductId =
@@ -46,22 +62,6 @@ namespace DD.Cloud.VersionManagement.Controllers
 				.ToArray();
 
 			return View("Index", releasesByProductId);
-		}
-
-		[Route("{releaseId:int}", Name = "Detail")]
-		public IActionResult Detail(int releaseId)
-		{
-			Release releaseById =
-				_entities.Releases.Include(
-					release => release.Product
-				)
-				.FirstOrDefault(
-					release => release.Id == releaseId
-				);
-			if (releaseById == null)
-				return HttpNotFound($"Release {releaseId} not found.");
-
-			return View(releaseById);
 		}
 	}
 }

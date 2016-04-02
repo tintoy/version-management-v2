@@ -5,22 +5,25 @@
 	ViewBag.Title = "Products";
 }
 
-<table>
-	<thead>
-	<tr>
-		<th>Id</th>
-		<th>Name</th>
-		<th>Links</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach (Product product in Model)
-	{
-		<tr>
-			<td>@product.Id</td>
-			<td>@product.Name</td>
-			<td>@Html.ActionLink("Releases", "ByProduct", "Releases", new { productId = product.Id })</td>
-		</tr>
-	}
-	</tbody>
-</table>
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Links</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (Product product in Model)
+				{
+					<tr>
+						<td>@Html.ActionLink(product.Name, "ById", new { productId = product.Id })</td>
+						<td>@Html.ActionLink("Releases", "ByProduct", "Releases", new { productId = product.Id })</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

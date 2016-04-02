@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
 
-    <link rel="stylesheet" href="~/styles/bootstrap.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="~/styles/bootstrap.css">
     <link rel="stylesheet" href="~/styles/bootstrap-theme.css">
 </head>
 <body>
-    <div>
-        @RenderBody()
+    <div class="container-fluid">
+	    <div class="row">
+		    <div class="col-md-10">
+			    @RenderBody()
+		    </div>
+	    </div>
     </div>
 
 	<script src="~/scripts/jquery.js"></script>

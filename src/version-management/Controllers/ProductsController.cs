@@ -20,11 +20,24 @@ namespace DD.Cloud.VersionManagement.Controllers
 			_entities = entities;
 		}
 
+		[Route("")]
 		public IActionResult Index()
 		{
 			Product[] products = _entities.Products.ToArray();
 
             return View(products);
         }
+
+		[Route("{productId:int}", Name = "ProductById")]
+		public IActionResult ById(int productId)
+		{
+			Product productById = _entities.Products.FirstOrDefault(
+				product => product.Id == productId
+			);
+			if (productById == null)
+				return HttpNotFound($"No product found with Id {productId}.");
+
+			return View("Detail", productById);
+		}
     }
 }

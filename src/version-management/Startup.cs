@@ -54,6 +54,7 @@ namespace DD.Cloud.VersionManagement
 			}
 
 			app.UseMvcWithDefaultRoute();
+			app.UseStaticFiles();
 		}
 
 		void SeedDatabase(VersionManagementEntities versionManagementEntities)

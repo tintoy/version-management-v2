@@ -1,0 +1,26 @@
+﻿@using DD.Cloud.VersionManagement.DataAccess.Models
+@model Product
+
+@{
+	ViewBag.Title = "Product - " + @Model.Name;
+}
+
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<form role="form">
+			<fieldset>
+				<legend>Product "@Model.Name"</legend>
+
+				<div class="form-group">
+					<label for="productName">Name</label>
+					<div id="productName">@Model.Name</div>
+				</div>
+				<div class="form-group">
+					<label for="productReleases">Release</label>
+					<div id="productReleases">@Html.ActionLink("Releases", "ByProduct", "Releases", new { productId = @Model.Id })</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
