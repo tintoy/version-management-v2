@@ -7,12 +7,24 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	using DataAccess;
 	using DataAccess.Models;
 
+	/// <summary>
+	/// 	The versions API controller.
+	/// </summary>
 	[Route("api/v2/[controller]")]
 	public class VersionsController
-	  : ApiController
+	  : ControllerBase
 	{
+		/// <summary>
+		/// 	The version-management entity context.
+		/// </summary>
 		readonly VersionManagementEntities _entities;
 
+		/// <summary>
+		/// 	Create a new <see cref="VersionsController"/>.
+		/// </summary>
+		/// <param name="entities">
+		///		The version-management entity context.
+		/// </param>
 		public VersionsController(VersionManagementEntities entities)
 		{
 			if (entities == null)
@@ -21,6 +33,21 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			_entities = entities;
 		}
 
+		/// <summary>
+		/// 	Get the version corresponding to the specified combination of product, release, and commit Id. 
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="releaseName">
+		///		The release name.
+		/// </param>
+		/// <param name="commitId">
+		///		The version control commit Id.
+		/// </param>
+		/// <returns>
+		///		The action result.
+		/// </returns>
 		[HttpGet("")]
 		public IActionResult GetVersion(string productName = null, string releaseName = null, string commitId = null)
 		{
@@ -55,6 +82,21 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			});
 		}
 
+		/// <summary>
+		/// 	Get or create the version corresponding to the specified combination of product, release, and commit Id. 
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="releaseName">
+		///		The release name.
+		/// </param>
+		/// <param name="commitId">
+		///		The version control commit Id.
+		/// </param>
+		/// <returns>
+		///		The action result.
+		/// </returns>
 		[HttpPost("")]
 		public IActionResult CreateVersion(string productName = null, string releaseName = null, string commitId = null)
 		{
@@ -76,30 +118,6 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 				CommitId = commitId,
 				Version = releaseVersion.ToSemanticVersion()
 			});
-		}
-
-		/// <summary>
-		///		Create an action result representing an entity that was not found.
-		/// </summary>
-		/// <typeparam name="TBody">
-		///		The response body type.
-		/// </typeparam>
-		/// <param name="body">
-		///		The response body.
-		/// </param>
-		/// <returns>
-		///		The action result.
-		/// </returns>
-		/// <remarks>
-		///		TODO: Move this to a shared base class.
-		/// </remarks>
-		IActionResult EntityNotFound<TBody>(TBody body)
-		{
-			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
-			
-			// TODO: Add X-EntityType header.
-
-			return new HttpNotFoundObjectResult(body);
 		}
 	}
 }

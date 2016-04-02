@@ -11,7 +11,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 	///		The releases controller.
 	/// </summary>
 	[Route("releases")]
-    public class ReleasesController
+	public class ReleasesController
 		: Controller
 	{
 		/// <summary>
@@ -48,8 +48,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 				)
 				.ToArray();
 
-            return View(releases);
-        }
+			return View(releases);
+		}
 
 		/// <summary>
 		///		Show all releases for the specified product.

@@ -10,7 +10,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 	///		The products controller.
 	/// </summary>
 	[Route("products")]
-    public class ProductsController
+	public class ProductsController
 		: Controller
 	{
 		/// <summary>
@@ -43,8 +43,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 		{
 			Product[] products = _entities.Products.ToArray();
 
-            return View(products);
-        }
+			return View(products);
+		}
 
 		/// <summary>
 		///		Show the detail for a specific product.
@@ -66,5 +66,5 @@ namespace DD.Cloud.VersionManagement.Controllers
 
 			return View("Detail", productById);
 		}
-    }
+	}
 }

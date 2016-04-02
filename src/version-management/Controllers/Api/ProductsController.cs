@@ -15,7 +15,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	/// </summary>
 	[Route("api/v2/[controller]")]
 	public class ProductsController
-		: ApiController
+		: ControllerBase
 	{
 		/// <summary>
 		///		The version-management entity context.
@@ -189,30 +189,6 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			await _entities.SaveChangesAsync();
 
 			return Ok();
-		}
-
-		/// <summary>
-		///		Create an action result representing an entity that was not found.
-		/// </summary>
-		/// <typeparam name="TBody">
-		///		The response body type.
-		/// </typeparam>
-		/// <param name="body">
-		///		The response body.
-		/// </param>
-		/// <returns>
-		///		The action result.
-		/// </returns>
-		/// <remarks>
-		///		TODO: Move this to a shared base class.
-		/// </remarks>
-		IActionResult EntityNotFound<TBody>(TBody body)
-		{
-			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
-			
-			// TODO: Add X-EntityType header.
-
-			return new HttpNotFoundObjectResult(body);
 		}
 	}
 }
