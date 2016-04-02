@@ -7,7 +7,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	using DataAccess;
 	using DataAccess.Models;
 
-	[Route("api/v2/versions")]
+	[Route("api/v2/[controller]")]
 	public class VersionsController
 	  : ApiController
 	{
@@ -78,9 +78,26 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			});
 		}
 
-		HttpNotFoundObjectResult EntityNotFound<TBody>(TBody body)
+		/// <summary>
+		///		Create an action result representing an entity that was not found.
+		/// </summary>
+		/// <typeparam name="TBody">
+		///		The response body type.
+		/// </typeparam>
+		/// <param name="body">
+		///		The response body.
+		/// </param>
+		/// <returns>
+		///		The action result.
+		/// </returns>
+		/// <remarks>
+		///		TODO: Move this to a shared base class.
+		/// </remarks>
+		IActionResult EntityNotFound<TBody>(TBody body)
 		{
 			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
+			
+			// TODO: Add X-EntityType header.
 
 			return new HttpNotFoundObjectResult(body);
 		}

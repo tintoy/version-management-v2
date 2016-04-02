@@ -1,4 +1,5 @@
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,10 +11,18 @@ namespace DD.Cloud.VersionManagement
 {
 	using DataAccess;
 	using DataAccess.Models;
-	using Microsoft.AspNet.Diagnostics;
 
+	/// <summary>
+	///    Configuration logic for the version-management application.
+	/// </summary>
 	public sealed class Startup
 	{
+		/// <summary>
+		///   Configure / register components and services.
+		/// </summary>
+		/// <param name="services">
+		///     The global service collection.
+		/// </param>
 		public void ConfigureServices(IServiceCollection services)
 		{
 			if (services == null)
@@ -37,12 +46,17 @@ namespace DD.Cloud.VersionManagement
 				});
 		}
 
+		/// <summary>
+		///   Configure the application pipeline.
+		/// </summary>
+		/// <param name="app">
+		///     The application pipeline builder.
+		/// </param>
 		public void Configure(IApplicationBuilder app)
 		{
 			if (app == null)
 				throw new ArgumentNullException(nameof(app));
 
-			app.Properties["host.AppMode"] = "development";
 			app.UseDeveloperExceptionPage();
 
 			// Ensure database is created / upgraded at startup.
@@ -50,14 +64,20 @@ namespace DD.Cloud.VersionManagement
 			{
 				VersionManagementEntities versionManagementEntities = serviceScope.ServiceProvider.GetService<VersionManagementEntities>();
 				versionManagementEntities.Database.Migrate();
-				SeedDatabase(versionManagementEntities);
+				CreateInitialData(versionManagementEntities);
 			}
 
 			app.UseMvcWithDefaultRoute();
 			app.UseStaticFiles();
 		}
 
-		void SeedDatabase(VersionManagementEntities versionManagementEntities)
+		/// <summary>
+		/// 	Seed the version-management database with initial data, if required.
+		/// </summary>
+		/// <param name="versionManagementEntities">
+		///		The version-management entity context.
+		/// </param>
+		void CreateInitialData(VersionManagementEntities versionManagementEntities)
 		{
 			if (versionManagementEntities == null)
 				throw new ArgumentNullException(nameof(versionManagementEntities));
@@ -130,6 +150,12 @@ namespace DD.Cloud.VersionManagement
 			versionManagementEntities.SaveChanges();
 		}
 
+		/// <summary>
+		/// 	The main program entry point.
+		/// </summary>
+		/// <param name="args)">
+		///		Command-line arguments.
+		/// </param>
 		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 	}
 }
