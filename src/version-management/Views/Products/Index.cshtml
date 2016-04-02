@@ -19,8 +19,8 @@
 				@foreach (Product product in Model)
 				{
 					<tr>
-						<td>@Html.ActionLink(product.Name, "ById", new { productId = product.Id })</td>
-						<td>@Html.ActionLink("Releases", "ByProduct", "Releases", new { productId = product.Id })</td>
+						<td>@Html.ActionLink(product.Name, "DetailById", new { productId = product.Id })</td>
+						<td>@Html.ActionLink("Releases", "IndexByProduct", "Releases", new { productId = product.Id })</td>
 					</tr>
 				}
 			</tbody>

@@ -1,28 +1,60 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Data.Entity;
 
 namespace DD.Cloud.VersionManagement.DataAccess
 {
-	using System.Collections.Generic;
 	using Models;
 
+	/// <summary>
+	///		The version-management entity context.
+	/// </summary>
 	public sealed class VersionManagementEntities
 		: DbContext
 	{
+		/// <summary>
+		///		Create a new version-management entity context.
+		/// </summary>
 		public VersionManagementEntities()
 		{
 		}
 
+		/// <summary>
+		///		The set of all <see cref="Product"/> entities.
+		/// </summary>
 		public DbSet<Product> Products { get; set; }
 
+		/// <summary>
+		///		The set of all <see cref="Release"/> entities.
+		/// </summary>
 		public DbSet<Release> Releases { get; set; }
 
+		/// <summary>
+		///		The set of all <see cref="ReleaseVersion"/> entities.
+		/// </summary>
 		public DbSet<ReleaseVersion> ReleaseVersions { get; set; }
 
+		/// <summary>
+		///		The set of all <see cref="VersionRange"/> entities.
+		/// </summary>
 		public DbSet<VersionRange> VersionRanges { get; set; }
 
+		/// <summary>
+		///		Get the <see cref="ReleaseVersion"/> (if it exists) for the specified combination of product, release, and commit Id.
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="releaseName">
+		///		The release name.
+		/// </param>
+		/// <param name="commitId">
+		///		The commit Id.
+		/// </param>
+		/// <returns>
+		///		The <see cref="ReleaseVersion"/>, or <c>null</c> if no matching <see cref="ReleaseVersion"/> was found.
+		/// </returns>
 		public ReleaseVersion GetReleaseVersion(string productName, string releaseName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
@@ -57,6 +89,21 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			return matchingVersion;
 		}
 
+		/// <summary>
+		///		Get or create the <see cref="ReleaseVersion"/> for the specified combination of product, release, and commit Id.
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="releaseName">
+		///		The release name.
+		/// </param>
+		/// <param name="commitId">
+		///		The commit Id.
+		/// </param>
+		/// <returns>
+		///		The <see cref="ReleaseVersion"/>.
+		/// </returns>
 		public ReleaseVersion GetOrCreateReleaseVersion(string productName, string releaseName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
@@ -100,7 +147,19 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			return newVersion;
 		}
 
-		public ReleaseVersion[] GetProductVersionsFromCommitId(string productName, string commitId)
+		/// <summary>
+		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and commit Id.
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="commitId">
+		///		The commit Id.
+		/// </param>
+		/// <returns>
+		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		/// </returns>
+		public IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromCommitId(string productName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -117,7 +176,19 @@ namespace DD.Cloud.VersionManagement.DataAccess
 				.ToArray();
 		}
 
-		public ReleaseVersion[] GetProductVersionsFromSemanticVersion(string productName, string semanticVersion)
+		/// <summary>
+		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and semantic version.
+		/// </summary>
+		/// <param name="productName">
+		///		The product name.
+		/// </param>
+		/// <param name="semanticVersion">
+		///		The semantic version.
+		/// </param>
+		/// <returns>
+		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		/// </returns>
+		public IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromSemanticVersion(string productName, string semanticVersion)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -148,7 +219,13 @@ namespace DD.Cloud.VersionManagement.DataAccess
 				)
 				.ToArray();
 		}
-
+		
+		/// <summary>
+		///		Called when the entity model is being created.
+		/// </summary>
+		/// <param name="modelBuilder">
+		///		The entity model builder.
+		/// </param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			if (modelBuilder == null)
@@ -156,21 +233,21 @@ namespace DD.Cloud.VersionManagement.DataAccess
 
 			base.OnModelCreating(modelBuilder);
 
-			var productEntity = modelBuilder.Entity<Product>();
-			productEntity.HasKey(product => product.Id);
+			modelBuilder.Entity<Product>()
+				.HasKey(product => product.Id);
 
-			var releaseEntity = modelBuilder.Entity<Release>();
-			releaseEntity.HasKey(release => release.Id);
+			modelBuilder.Entity<Release>()
+				.HasKey(release => release.Id);
 
-			var versionRangeEntity = modelBuilder.Entity<VersionRange>();
-			versionRangeEntity.HasKey(versionRange => versionRange.Id);
+			modelBuilder.Entity<VersionRange>()
+				.HasKey(versionRange => versionRange.Id);
 
-			var releaseVersionEntity = modelBuilder.Entity<ReleaseVersion>();
-			releaseVersionEntity.HasKey(releaseVersion => new
-			{
-				releaseVersion.CommitId,
-				releaseVersion.ReleaseId
-			});
+			modelBuilder.Entity<ReleaseVersion>()
+				.HasKey(releaseVersion => new
+				{
+					releaseVersion.CommitId,
+					releaseVersion.ReleaseId
+				});
 		}
 	}
 }

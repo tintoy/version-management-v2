@@ -4,16 +4,26 @@ using Microsoft.AspNet.Mvc;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
+	/// <summary>
+	///		The default ("Home") controller.
+	/// </summary>
 	[Route("")]
 	public class HomeController
 		: Controller
 	{
-		public HomeController(VersionManagementEntities entities)
+		/// <summary>
+		///		Create a new <see cref="HomeController"/>.
+		/// </summary>
+		public HomeController()
 		{
-			if (entities == null)
-				throw new ArgumentNullException(nameof(entities));
 		}
 
+		/// <summary>
+		///		Show the version-management home page.
+		/// </summary>
+		/// <returns>
+		///		An action result that renders the home page.
+		/// </returns>
 		[Route("")]
 		public IActionResult Index()
 		{
