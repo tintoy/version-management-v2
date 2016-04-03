@@ -1,45 +1,47 @@
 {
-    "version": "1.0.0-alpha1",
-    "compilationOptions": {
-        "emitEntryPoint": true
-    },
-    "tooling": {
-        "defaultNamespace": "DD.Cloud.VersionManagement"
-    },
+	"version": "1.0.0-alpha1",
+	"compilationOptions": {
+		"emitEntryPoint": true
+	},
+	"tooling": {
+		"defaultNamespace": "DD.Cloud.VersionManagement"
+	},
 
-    "dependencies": {
-        "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-        "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
-        "Microsoft.AspNet.Mvc.WebApiCompatShim": "6.0.0-rc1-final",
-        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-        "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-        "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
-        "Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
-        "EntityFramework.Commands": "7.0.0-rc1-final",
-        "EntityFramework.SQLite": "7.0.0-rc1-final"
-    },
+	"dependencies": {
+		"Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+		"Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+		"Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+		"Microsoft.AspNet.Mvc.WebApiCompatShim": "6.0.0-rc1-final",
+		"Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+		"Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+		"Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+		"Microsoft.Extensions.CodeGenerators.Mvc": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+        "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+		"EntityFramework.Commands": "7.0.0-rc1-final",
+		"EntityFramework.SQLite": "7.0.0-rc1-final"
+	},
 
-    "commands": {
-        "web": "Microsoft.AspNet.Server.Kestrel",
-        "ef": "EntityFramework.Commands",
-        "gen": "Microsoft.Extensions.CodeGeneration"
-    },
+	"commands": {
+		"web": "Microsoft.AspNet.Server.Kestrel",
+		"ef": "EntityFramework.Commands",
+		"gen": "Microsoft.Extensions.CodeGeneration"
+	},
 
-    "scripts": {
-        "first-run": "npm install"
-    },
+	"scripts": {
+		"first-run": "npm install"
+	},
 
-    "frameworks": {
-        "dnxcore50": { }
-    },
+	"frameworks": {
+		"dnxcore50": { }
+	},
 
-    "exclude": [
-        "wwwroot",
-        "node_modules"
-    ],
-    "publishExclude": [
-        "**.user",
-        "**.vspscc"
-    ]
+	"exclude": [
+		"wwwroot",
+		"node_modules"
+	],
+	"publishExclude": [
+		"**.user",
+		"**.vspscc"
+	]
 }

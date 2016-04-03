@@ -27,7 +27,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[Route("")]
 		public IActionResult Index()
 		{
-			return Content("This is the version-management application.");
+			return Content("This is the version-management application.", contentType: "text/plain");
 		}
 	}
 }
