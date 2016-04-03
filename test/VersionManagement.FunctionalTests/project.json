@@ -1,13 +1,13 @@
 ﻿{
     "version": "1.0.0-alpha1",
-    "description": "Tests for DD Cloud version-management",
+    "description": "Functional tests for DD Cloud version-management",
     "authors": [ "tintoy" ],
 
     "compilationOptions": {
         "emitEntryPoint": false
     },
     "tooling": {
-        "defaultNamespace": "DD.Cloud.VersionManagement.Tests"
+        "defaultNamespace": "DD.Cloud.VersionManagement.FunctionalTests"
     },
 
     "frameworks": {
@@ -20,7 +20,7 @@
         "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
         "Microsoft.AspNet.Mvc.WebApiCompatShim": "6.0.0-rc1-final",
         "EntityFramework.SQLite": "7.0.0-rc1-final",
-        "version-management": "1.0.0-alpha1",
+        "VersionManagement": "1.0.0-alpha1",
         "xunit": "2.1.0",
         "xunit.runner.dnx": "2.1.0-rc1-build204"
     },

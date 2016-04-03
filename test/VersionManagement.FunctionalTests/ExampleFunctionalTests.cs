@@ -4,25 +4,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DD.Cloud.VersionManagement.Tests
+namespace DD.Cloud.VersionManagement.FunctionalTests
 {
 	/// <summary>
-	///		Some example unit tests.
+	///		Some example functional tests.
 	/// </summary>
-	public class ExampleTests
+	public class ExampleFunctionalTests
     {
-		/// <summary>
-		///		A test that passes.
-		/// </summary>
-		[Fact]
-		public void This_Test_Passes()
-		{
-			Assert.Equal(true, true);
-			Assert.Equal(false, false);
-			Assert.NotEqual(true, false);
-			Assert.NotEqual(false, true);
-		}
-
 		/// <summary>
 		///		Verify that the version management application can be started.
 		/// </summary>

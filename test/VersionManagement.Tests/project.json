@@ -1,0 +1,26 @@
+﻿{
+    "version": "1.0.0-alpha1",
+    "description": "Tests for DD Cloud version-management",
+    "authors": [ "tintoy" ],
+
+    "compilationOptions": {
+        "emitEntryPoint": false
+    },
+    "tooling": {
+        "defaultNamespace": "DD.Cloud.VersionManagement.Tests"
+    },
+
+    "frameworks": {
+        "dnxcore50": { }
+    },
+
+    "dependencies": {
+        "VersionManagement": "1.0.0-alpha1",
+        "xunit": "2.1.0",
+        "xunit.runner.dnx": "2.1.0-rc1-build204"
+    },
+
+    "commands": {
+        "test": "xunit.runner.dnx"
+    }
+}

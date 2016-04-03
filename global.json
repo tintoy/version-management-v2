@@ -1,6 +1,6 @@
 {
 	"projects": [
-        "src/version-management",
+        "src/VersionManagement",
         "src"
 	],
 	"sdk": {
