@@ -1,6 +1,5 @@
 using Microsoft.AspNet.Mvc;
 using System;
-using System.Web.Http;
 
 namespace DD.Cloud.VersionManagement.Controllers.Api
 {
@@ -15,22 +14,22 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 	  : ControllerBase
 	{
 		/// <summary>
-		/// 	The version-management entity context.
+		/// 	The version-management data access facility.
 		/// </summary>
-		readonly VersionManagementEntities _entities;
+		readonly IVersionManagementData _data;
 
 		/// <summary>
 		/// 	Create a new <see cref="VersionsController"/>.
 		/// </summary>
-		/// <param name="entities">
-		///		The version-management entity context.
+		/// <param name="data">
+		///		The version-management data access facility.
 		/// </param>
-		public VersionsController(VersionManagementEntities entities)
+		public VersionsController(IVersionManagementData data)
 		{
-			if (entities == null)
-				throw new ArgumentNullException(nameof(entities));
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
 
-			_entities = entities;
+			_data = data;
 		}
 
 		/// <summary>
@@ -60,7 +59,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ReleaseVersion releaseVersion = _entities.GetReleaseVersion(productName, releaseName, commitId);
+			ReleaseVersion releaseVersion = _data.GetReleaseVersion(productName, releaseName, commitId);
 			if (releaseVersion != null)
 			{
 				return Ok(new
@@ -109,7 +108,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ReleaseVersion releaseVersion = _entities.GetOrCreateReleaseVersion(productName, releaseName, commitId);
+			ReleaseVersion releaseVersion = _data.GetOrCreateReleaseVersion(productName, releaseName, commitId);
 
 			return Ok(new
 			{

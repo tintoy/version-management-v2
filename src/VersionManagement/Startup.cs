@@ -37,6 +37,8 @@ namespace DD.Cloud.VersionManagement
 					);
 				});
 
+			services.AddScoped<IVersionManagementData, VersionManagementData>();
+
 			services.AddMvc()
 				.AddJsonOptions(json =>
 				{
