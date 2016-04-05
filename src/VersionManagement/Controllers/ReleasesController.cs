@@ -42,7 +42,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[Route("")]
 		public IActionResult Index()
 		{
-			Release[] releases =
+			ReleaseData[] releases =
 				_entities.Releases.Include(
 					release => release.Product
 				)
@@ -63,7 +63,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[Route("product/{productId:int}")]
 		public IActionResult IndexByProduct(int productId)
 		{
-			Release[] releasesByProductId =
+			ReleaseData[] releasesByProductId =
 				_entities.Releases.Include(
 					release => release.Product
 				)
@@ -78,7 +78,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[Route("{releaseId:int}")]
 		public IActionResult DetailById(int releaseId)
 		{
-			Release releaseById =
+			ReleaseData releaseById =
 				_entities.Releases.Include(
 					release => release.Product
 				)

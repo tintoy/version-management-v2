@@ -54,7 +54,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Release[] releases;
+			ReleaseData[] releases;
 			if (!String.IsNullOrWhiteSpace(releaseName))
 			{
 				releases =
@@ -92,7 +92,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Release matchingRelease = _entities.Releases.FirstOrDefault(
+			ReleaseData matchingRelease = _entities.Releases.FirstOrDefault(
 				Release => Release.Id == id
 			);
 			if (matchingRelease != null)
@@ -119,7 +119,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Release Release = _entities.Releases.FirstOrDefault(
+			ReleaseData Release = _entities.Releases.FirstOrDefault(
 				existingRelease => existingRelease.Name == releaseName && existingRelease.ProductId == productId
 			);
 			if (Release != null)
@@ -131,7 +131,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 				return Conflict();
 			}
 
-			Release = new Release
+			Release = new ReleaseData
 			{
 				Name = releaseName,
 				ProductId = productId
@@ -160,7 +160,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Release existingRelease = _entities.Releases.FirstOrDefault(
+			ReleaseData existingRelease = _entities.Releases.FirstOrDefault(
 				matchingRelease => matchingRelease.Id == releaseId
 			);
 			if (existingRelease == null)
@@ -187,7 +187,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Release matchingRelease = _entities.Releases.FirstOrDefault(
+			ReleaseData matchingRelease = _entities.Releases.FirstOrDefault(
 				Release => Release.Id == releaseId
 			);
 			if (matchingRelease == null)

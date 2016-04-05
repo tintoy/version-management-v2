@@ -1,12 +1,11 @@
-﻿@using DD.Cloud.VersionManagement.DataAccess.Models
-@model Product
+﻿@using DD.Cloud.VersionManagement.Models
+@model ProductModel
 
 @{
 	ViewBag.Title = "Product - " + @Model.Name;
 }
 
 <div class="row">
-	<div class="col-md-2"></div>
 	<div class="col-md-8">
 		<form role="form">
 			<fieldset>
@@ -14,14 +13,13 @@
 
 				<div class="form-group">
 					<label for="productName">Name</label>
-					<div class="form-control" id="releaseName">@Model.Name</div>
+					<div class="form-control" id="productName">@Model.Name</div>
 				</div>
 			</fieldset>
 		</form>
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-2"></div>
 	<div class="col-md-8">
 		<hr/>
 		<a asp-controller="Releases" asp-action="IndexByProduct" asp-route-productId="@Model.Id">Go to releases for @Model.Name</a>

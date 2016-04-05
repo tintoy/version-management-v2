@@ -19,24 +19,24 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		}
 
 		/// <summary>
-		///		The set of all <see cref="Product"/> entities.
+		///		The set of all <see cref="ProductData"/> entities.
 		/// </summary>
-		public DbSet<Product> Products { get; set; }
+		public DbSet<ProductData> Products { get; set; }
 
 		/// <summary>
-		///		The set of all <see cref="Release"/> entities.
+		///		The set of all <see cref="ReleaseData"/> entities.
 		/// </summary>
-		public DbSet<Release> Releases { get; set; }
+		public DbSet<ReleaseData> Releases { get; set; }
 
 		/// <summary>
-		///		The set of all <see cref="ReleaseVersion"/> entities.
+		///		The set of all <see cref="ReleaseVersionData"/> entities.
 		/// </summary>
-		public DbSet<ReleaseVersion> ReleaseVersions { get; set; }
+		public DbSet<ReleaseVersionData> ReleaseVersions { get; set; }
 
 		/// <summary>
-		///		The set of all <see cref="VersionRange"/> entities.
+		///		The set of all <see cref="VersionRangeData"/> entities.
 		/// </summary>
-		public DbSet<VersionRange> VersionRanges { get; set; }
+		public DbSet<VersionRangeData> VersionRanges { get; set; }
 
 		/// <summary>
 		///		Called when the entity model is being created.
@@ -51,16 +51,24 @@ namespace DD.Cloud.VersionManagement.DataAccess
 
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<Product>()
+			modelBuilder.Entity<ProductData>()
+				.ToTable("Product");
+			modelBuilder.Entity<ProductData>()
 				.HasKey(product => product.Id);
 
-			modelBuilder.Entity<Release>()
+			modelBuilder.Entity<ReleaseData>()
+				.ToTable("Release");
+			modelBuilder.Entity<ReleaseData>()
 				.HasKey(release => release.Id);
 
-			modelBuilder.Entity<VersionRange>()
+			modelBuilder.Entity<VersionRangeData>()
+				.ToTable("VersionRange");
+			modelBuilder.Entity<VersionRangeData>()
 				.HasKey(versionRange => versionRange.Id);
 
-			modelBuilder.Entity<ReleaseVersion>()
+			modelBuilder.Entity<ReleaseVersionData>()
+				.ToTable("ReleaseVersion");
+			modelBuilder.Entity<ReleaseVersionData>()
 				.HasKey(releaseVersion => new
 				{
 					releaseVersion.CommitId,

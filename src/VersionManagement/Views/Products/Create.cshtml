@@ -1,0 +1,26 @@
+﻿@using DD.Cloud.VersionManagement.Models
+@model ProductModel
+
+@{
+	ViewBag.Title = "Create Product";
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<form role="form" asp-controller="Products" asp-action="Create">
+			<fieldset>
+				<legend>Create Product</legend>
+
+				<div class="form-group">
+					<label for="productName">Name</label>
+					<input type="text" id="productName" asp-for="Name" class="form-control" placeholder="Product name" />
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-default">Create</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>

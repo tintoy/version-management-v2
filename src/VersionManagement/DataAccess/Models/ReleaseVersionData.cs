@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
-	public sealed class ReleaseVersion
+	public sealed class ReleaseVersionData
     {
-		public ReleaseVersion()
+		public ReleaseVersionData()
 		{
 		}
 
-		public ReleaseVersion(Release release, string commitId, Version nextVersion)
+		public ReleaseVersionData(ReleaseData release, string commitId, Version nextVersion)
 		{
 			if (release == null)
 				throw new ArgumentNullException(nameof(release));
@@ -49,7 +49,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		[Required]
 		public string SpecialVersion { get; set; }
 
-		public Release Release { get; set; }
+		public ReleaseData Release { get; set; }
 
 		public string ToSemanticVersion()
 		{

@@ -10,7 +10,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
     public interface IVersionManagementData
     {
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/> (if it exists) for the specified combination of product, release, and commit Id.
+		///		Get the <see cref="ReleaseVersionData"/> (if it exists) for the specified combination of product, release, and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -22,12 +22,12 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ReleaseVersion"/>, or <c>null</c> if no matching <see cref="ReleaseVersion"/> was found.
+		///		The <see cref="ReleaseVersionData"/>, or <c>null</c> if no matching <see cref="ReleaseVersionData"/> was found.
 		/// </returns>
-		ReleaseVersion GetReleaseVersion(string productName, string releaseName, string commitId);
+		ReleaseVersionData GetReleaseVersion(string productName, string releaseName, string commitId);
 
 		/// <summary>
-		///		Get or create the <see cref="ReleaseVersion"/> for the specified combination of product, release, and commit Id.
+		///		Get or create the <see cref="ReleaseVersionData"/> for the specified combination of product, release, and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -39,12 +39,12 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ReleaseVersion"/>.
+		///		The <see cref="ReleaseVersionData"/>.
 		/// </returns>
-		ReleaseVersion GetOrCreateReleaseVersion(string productName, string releaseName, string commitId);
+		ReleaseVersionData GetOrCreateReleaseVersion(string productName, string releaseName, string commitId);
 
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and commit Id.
+		///		Get the <see cref="ReleaseVersionData"/>(s) for the specified combination of product and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -53,12 +53,12 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		///		A read-only list of matching <see cref="ReleaseVersionData"/>s.
 		/// </returns>
-		IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromCommitId(string productName, string commitId);
+		IReadOnlyList<ReleaseVersionData> GetReleaseVersionsFromCommitId(string productName, string commitId);
 
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and semantic version.
+		///		Get the <see cref="ReleaseVersionData"/>(s) for the specified combination of product and semantic version.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -67,8 +67,8 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The semantic version.
 		/// </param>
 		/// <returns>
-		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		///		A read-only list of matching <see cref="ReleaseVersionData"/>s.
 		/// </returns>
-		IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromSemanticVersion(string productName, string semanticVersion);
+		IReadOnlyList<ReleaseVersionData> GetReleaseVersionsFromSemanticVersion(string productName, string semanticVersion);
     }
 }

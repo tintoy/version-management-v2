@@ -37,7 +37,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		/// <summary>
-		///		Get a <see cref="Product"/> by name.
+		///		Get a <see cref="ProductData"/> by name.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -50,12 +50,12 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 			{
-				Product[] products = _entities.Products.ToArray();
+				ProductData[] products = _entities.Products.ToArray();
 
 				return Ok(products);
 			}
 
-			Product productByName = _entities.Products.FirstOrDefault(
+			ProductData productByName = _entities.Products.FirstOrDefault(
 				product => product.Name == productName
 			);
 			if (productByName != null)
@@ -70,7 +70,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		/// <summary>
-		///		Get a <see cref="Product"/> by Id.
+		///		Get a <see cref="ProductData"/> by Id.
 		/// </summary>
 		/// <param name="productId">
 		///		The product Id.
@@ -84,7 +84,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Product matchingProduct = _entities.Products.FirstOrDefault(
+			ProductData matchingProduct = _entities.Products.FirstOrDefault(
 				product => product.Id == productId
 			);
 			if (matchingProduct != null)
@@ -94,7 +94,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		/// <summary>
-		///		Create a new <see cref="Product"/>.
+		///		Create a new <see cref="ProductData"/>.
 		/// </summary>
 		/// <param name="name">
 		///		A unique name for the new product.
@@ -108,7 +108,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Product product = _entities.Products.FirstOrDefault(
+			ProductData product = _entities.Products.FirstOrDefault(
 				existingProduct => existingProduct.Name == name
 			);
 			if (product != null)
@@ -123,7 +123,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 				return Conflict();
 			}
 
-			product = new Product
+			product = new ProductData
 			{
 				Name = name
 			};
@@ -135,10 +135,10 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		/// <summary>
-		///		Update an existing <see cref="Product"/>.
+		///		Update an existing <see cref="ProductData"/>.
 		/// </summary>
 		/// <param name="id">
-		///		The Id of the <see cref="Product"/> to update.
+		///		The Id of the <see cref="ProductData"/> to update.
 		/// </param>
 		/// <param name="name">
 		///		The product name.
@@ -152,7 +152,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Product existingProduct = _entities.Products.FirstOrDefault(
+			ProductData existingProduct = _entities.Products.FirstOrDefault(
 				matchingProduct => matchingProduct.Id == id
 			);
 			if (existingProduct == null)
@@ -165,10 +165,10 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		}
 
 		/// <summary>
-		///		Delete an existing <see cref="Product"/>.
+		///		Delete an existing <see cref="ProductData"/>.
 		/// </summary>
 		/// <param name="id">
-		///		The Id of the <see cref="Product"/> to delete.
+		///		The Id of the <see cref="ProductData"/> to delete.
 		/// </param>
 		/// <returns>
 		///		The action result.
@@ -179,7 +179,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Product matchingProduct = _entities.Products.FirstOrDefault(
+			ProductData matchingProduct = _entities.Products.FirstOrDefault(
 				product => product.Id == id
 			);
 			if (matchingProduct == null)

@@ -1,12 +1,11 @@
-﻿@using DD.Cloud.VersionManagement.DataAccess.Models
-@model IEnumerable<Product>
+﻿@using DD.Cloud.VersionManagement.Models
+@model IEnumerable<ProductModel>
 
 @{
 	ViewBag.Title = "Products";
 }
 
 <div class="row">
-	<div class="col-md-2"></div>
 	<div class="col-md-8">
 		<table class="table">
 			<thead>
@@ -16,7 +15,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (Product product in Model)
+				@foreach (ProductModel product in Model)
 				{
 					<tr>
 						<td>
@@ -29,5 +28,10 @@
 				}
 			</tbody>
 		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 text-right">
+		<a asp-action="Create" class="btn btn-default">Create new product</a>
 	</div>
 </div>

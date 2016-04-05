@@ -38,7 +38,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		public void Dispose() => _entityContext.Dispose();
 
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/> (if it exists) for the specified combination of product, release, and commit Id.
+		///		Get the <see cref="ReleaseVersionData"/> (if it exists) for the specified combination of product, release, and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -50,9 +50,9 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ReleaseVersion"/>, or <c>null</c> if no matching <see cref="ReleaseVersion"/> was found.
+		///		The <see cref="ReleaseVersionData"/>, or <c>null</c> if no matching <see cref="ReleaseVersionData"/> was found.
 		/// </returns>
-		public ReleaseVersion GetReleaseVersion(string productName, string releaseName, string commitId)
+		public ReleaseVersionData GetReleaseVersion(string productName, string releaseName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -63,13 +63,13 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (String.IsNullOrWhiteSpace(commitId))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
 
-			Product matchingProduct = _entityContext.Products.FirstOrDefault(product =>
+			ProductData matchingProduct = _entityContext.Products.FirstOrDefault(product =>
 				product.Name == productName
 			);
 			if (matchingProduct == null)
 				throw new VersionManagementException("Product not found: '{0}'.", productName);
 
-			Release matchingRelease = _entityContext.Releases.FirstOrDefault(release =>
+			ReleaseData matchingRelease = _entityContext.Releases.FirstOrDefault(release =>
 				release.ProductId == matchingProduct.Id
 				&&
 				release.Name == releaseName
@@ -77,7 +77,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingRelease == null)
 				throw new VersionManagementException("Release not found: '{0}'.", releaseName);
 
-			ReleaseVersion matchingVersion = _entityContext.ReleaseVersions.FirstOrDefault(version =>
+			ReleaseVersionData matchingVersion = _entityContext.ReleaseVersions.FirstOrDefault(version =>
 				version.ReleaseId == matchingRelease.Id
 				&&
 				version.CommitId == commitId
@@ -87,7 +87,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		}
 
 		/// <summary>
-		///		Get or create the <see cref="ReleaseVersion"/> for the specified combination of product, release, and commit Id.
+		///		Get or create the <see cref="ReleaseVersionData"/> for the specified combination of product, release, and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -99,9 +99,9 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		The <see cref="ReleaseVersion"/>.
+		///		The <see cref="ReleaseVersionData"/>.
 		/// </returns>
-		public ReleaseVersion GetOrCreateReleaseVersion(string productName, string releaseName, string commitId)
+		public ReleaseVersionData GetOrCreateReleaseVersion(string productName, string releaseName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -112,13 +112,13 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (String.IsNullOrWhiteSpace(commitId))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
 
-			Product matchingProduct = _entityContext.Products.FirstOrDefault(product =>
+			ProductData matchingProduct = _entityContext.Products.FirstOrDefault(product =>
 				product.Name == productName
 			);
 			if (matchingProduct == null)
 				throw new VersionManagementException("Product not found: '{0}'.", productName);
 
-			Release matchingRelease =
+			ReleaseData matchingRelease =
 				_entityContext.Releases.Include(release => release.VersionRange)
 					.FirstOrDefault(release =>
 						release.ProductId == matchingProduct.Id
@@ -128,7 +128,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingRelease == null)
 				throw new VersionManagementException("Release not found: '{0}'.", releaseName);
 
-			ReleaseVersion matchingVersion = _entityContext.ReleaseVersions.FirstOrDefault(version =>
+			ReleaseVersionData matchingVersion = _entityContext.ReleaseVersions.FirstOrDefault(version =>
 				version.ReleaseId == matchingRelease.Id
 				&&
 				version.CommitId == commitId
@@ -136,7 +136,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (matchingVersion != null)
 				return matchingVersion;
 
-			ReleaseVersion newVersion = matchingRelease.AllocateReleaseVersion(commitId);
+			ReleaseVersionData newVersion = matchingRelease.AllocateReleaseVersion(commitId);
 			_entityContext.ReleaseVersions.Add(newVersion);
 
 			_entityContext.SaveChanges();
@@ -145,7 +145,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		}
 
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and commit Id.
+		///		Get the <see cref="ReleaseVersionData"/>(s) for the specified combination of product and commit Id.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -154,9 +154,9 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The commit Id.
 		/// </param>
 		/// <returns>
-		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		///		A read-only list of matching <see cref="ReleaseVersionData"/>s.
 		/// </returns>
-		public IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromCommitId(string productName, string commitId)
+		public IReadOnlyList<ReleaseVersionData> GetReleaseVersionsFromCommitId(string productName, string commitId)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));
@@ -174,7 +174,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		}
 
 		/// <summary>
-		///		Get the <see cref="ReleaseVersion"/>(s) for the specified combination of product and semantic version.
+		///		Get the <see cref="ReleaseVersionData"/>(s) for the specified combination of product and semantic version.
 		/// </summary>
 		/// <param name="productName">
 		///		The product name.
@@ -183,9 +183,9 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		The semantic version.
 		/// </param>
 		/// <returns>
-		///		A read-only list of matching <see cref="ReleaseVersion"/>s.
+		///		A read-only list of matching <see cref="ReleaseVersionData"/>s.
 		/// </returns>
-		public IReadOnlyList<ReleaseVersion> GetReleaseVersionsFromSemanticVersion(string productName, string semanticVersion)
+		public IReadOnlyList<ReleaseVersionData> GetReleaseVersionsFromSemanticVersion(string productName, string semanticVersion)
 		{
 			if (String.IsNullOrWhiteSpace(productName))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'productName'.", nameof(productName));

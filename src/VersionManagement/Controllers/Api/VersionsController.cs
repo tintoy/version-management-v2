@@ -59,7 +59,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ReleaseVersion releaseVersion = _data.GetReleaseVersion(productName, releaseName, commitId);
+			ReleaseVersionData releaseVersion = _data.GetReleaseVersion(productName, releaseName, commitId);
 			if (releaseVersion != null)
 			{
 				return Ok(new
@@ -108,7 +108,7 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 			if (String.IsNullOrWhiteSpace(commitId))
 				return BadRequest("Must specify a valid commit Id.");
 
-			ReleaseVersion releaseVersion = _data.GetOrCreateReleaseVersion(productName, releaseName, commitId);
+			ReleaseVersionData releaseVersion = _data.GetOrCreateReleaseVersion(productName, releaseName, commitId);
 
 			return Ok(new
 			{

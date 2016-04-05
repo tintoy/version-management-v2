@@ -5,6 +5,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 {
 	using DataAccess;
 	using DataAccess.Models;
+	using Models;
 
 	/// <summary>
 	///		The products controller.
@@ -16,6 +17,9 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <summary>
 		///		The version-management entity context.
 		/// </summary>
+		/// <remarks>
+		///		TODO: Switch to using <see cref="IVersionManagementData"/> (and move required functionality into it).
+		/// </remarks>
 		readonly VersionManagementEntities _entities;
 
 		/// <summary>
@@ -38,10 +42,13 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <returns>
 		///		An action result that renders the product index view.
 		/// </returns>
-		[Route("")]
+		[HttpGet("")]
 		public IActionResult Index()
 		{
-			Product[] products = _entities.Products.ToArray();
+			ProductModel[] products =
+				_entities.Products
+					.Select(productData => ProductModel.FromData(productData))
+					.ToArray();
 
 			return View(products);
 		}
@@ -55,16 +62,65 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <returns>
 		///		An action result that renders the product detail view.
 		/// </returns>
-		[Route("{productId:int}", Name = "ProductById")]
+		[HttpGet("{productId:int}", Name = "ProductById")]
 		public IActionResult DetailById(int productId)
 		{
-			Product productById = _entities.Products.FirstOrDefault(
+			ProductData productById = _entities.Products.FirstOrDefault(
 				product => product.Id == productId
 			);
 			if (productById == null)
 				return HttpNotFound($"No product found with Id {productId}.");
 
-			return View("Detail", productById);
+			return View("Detail",
+				ProductModel.FromData(productById)
+			);
+		}
+
+		/// <summary>
+		///		Display the product creation view.
+		/// </summary>
+		/// <returns>
+		///		An action result that renders the product creation view.
+		/// </returns>
+		[HttpGet("create")]
+		public IActionResult Create()
+		{
+			return View(
+				new ProductModel()
+			);
+		}
+
+		/// <summary>
+		///		Handle input from the product creation view.
+		/// </summary>
+		/// <param name="product">
+		///		The product model.
+		/// </param>
+		/// <returns>
+		///		An action result that redirects to the product list view.
+		/// </returns>
+		[HttpPost("create")]
+		public IActionResult Create(ProductModel product)
+		{
+			if (!ModelState.IsValid)
+				return View(product);
+
+			ProductData existingProductDataByName = _entities.Products.FirstOrDefault(
+				existingProductData => existingProductData.Name == product.Name
+			);
+			if (existingProductDataByName != null)
+			{
+				ModelState.AddModelError("Name", $"A product already exists with name '{product.Name}'.");
+
+				return View(product);
+			}
+
+			_entities.Products.Add(
+				product.ToData()
+			);
+			_entities.SaveChanges();
+
+			return RedirectToAction("Index");
 		}
 	}
 }

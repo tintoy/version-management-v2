@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
-	public sealed class VersionRange
+	public sealed class VersionRangeData
 	{
-		public VersionRange()
+		public VersionRangeData()
 		{
 		}
 
@@ -57,7 +57,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		[Required]
 		public int EndVersionRevision { get; set; }
 
-		public ICollection<Release> Releases { get; set; } = new HashSet<Release>();
+		public ICollection<ReleaseData> Releases { get; set; } = new HashSet<ReleaseData>();
 
 		[NotMapped]
 		public Version StartVersion

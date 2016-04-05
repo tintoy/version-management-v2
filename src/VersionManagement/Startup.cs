@@ -94,7 +94,7 @@ namespace DD.Cloud.VersionManagement
 			if (versionManagementEntities.Products.Any())
 				return;
 
-			VersionRange versionRange1 = new VersionRange
+			VersionRangeData versionRange1 = new VersionRangeData
 			{
 				Name = "Product1",
 				StartVersion = new Version("1.0.0.0"),
@@ -104,7 +104,7 @@ namespace DD.Cloud.VersionManagement
 			};
 			versionManagementEntities.VersionRanges.Add(versionRange1);
 
-			VersionRange versionRange2 = new VersionRange
+			VersionRangeData versionRange2 = new VersionRangeData
 			{
 				Name = "Product2",
 				StartVersion = new Version("1.5.0.0"),
@@ -114,18 +114,18 @@ namespace DD.Cloud.VersionManagement
 			};
 			versionManagementEntities.VersionRanges.Add(versionRange2);
 
-			Product product1 = new Product
+			ProductData product1 = new ProductData
 			{
 				Name = "Product1",
 				Releases =
 				{
-					new Release
+					new ReleaseData
 					{
 						Name = "R1",
 						VersionRange = versionRange1,
 						SpecialVersion = null
 					},
-					new Release
+					new ReleaseData
 					{
 						Name = "R1-Develop",
 						VersionRange = versionRange1,
@@ -135,18 +135,18 @@ namespace DD.Cloud.VersionManagement
 			};
 			versionManagementEntities.Products.Add(product1);
 
-			Product product2 = new Product
+			ProductData product2 = new ProductData
 			{
 				Name = "Product2",
 				Releases =
 				{
-					new Release
+					new ReleaseData
 					{
 						Name = "R1.5",
 						VersionRange = versionRange2,
 						SpecialVersion = null
 					},
-					new Release
+					new ReleaseData
 					{
 						Name = "R1.5-Develop",
 						VersionRange = versionRange2,
