@@ -10,6 +10,7 @@ namespace DD.Cloud.VersionManagement.TagHelpers
 	///		Tag helper for Bootstrap navigation items that marks an item as active if its target controller and action are the current controller and action.
 	/// </summary>
 	[HtmlTargetElement("li", Attributes = "bootstrap-nav-action")]
+	[HtmlTargetElement("li", Attributes = "bootstrap-nav-controller")]
     public class BootstrapNavItemTagHelper
 		: TagHelper
     {
