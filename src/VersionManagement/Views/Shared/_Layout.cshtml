@@ -20,13 +20,22 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Versioning", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				<a asp-controller="Home" asp-action="Index" class="navbar-brand">Versioning</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-					<li>@Html.ActionLink("Products", "Index", "Products", new { area = "" }, null)</li>
-					<li>@Html.ActionLink("Releases", "Index", "Releases", new { area = "" }, null)</li>
+					<li>
+						<a asp-controller="Home" asp-action="Index">Home</a>
+					</li>
+					<li>
+						<a asp-controller="Products" asp-action="Index">Products</a>
+					</li>
+					<li>
+						<a asp-controller="Releases" asp-action="Index">Releases</a>
+					</li>
+					<li>
+						<a asp-controller="VersionRanges" asp-action="Index">Version ranges</a>
+					</li>
 				</ul>
 			</div>
 		</div>

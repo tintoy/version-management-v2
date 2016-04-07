@@ -1,0 +1,54 @@
+﻿@using DD.Cloud.VersionManagement.Models
+@model VersionRangeModel
+
+@{
+	ViewBag.Title = $"Edit version range - '{Model.Name}'";
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<form role="form" asp-controller="VersionRanges" asp-action="Edit" method="POST">
+			<fieldset>
+				<legend>Edit version range '@Model.Name'</legend>
+
+				<input type="hidden" asp-for="Id" />
+
+				<div class="form-group">
+					<label for="versionRangeName">Name</label>
+					<input type="text" id="versionRangeName" asp-for="Name" class="form-control" placeholder="Version range name"/>
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="versionRangeStart">Start</label>
+					<input type="text" id="versionRangeStart" asp-for="StartVersion" class="form-control" placeholder="Starting version"/>
+					<span asp-validation-for="StartVersion" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="versionRangeEnd">End</label>
+					<input type="text" id="versionRangeEnd" asp-for="EndVersion" class="form-control" placeholder="Ending version"/>
+					<span asp-validation-for="EndVersion" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="versionRangeNext">Next</label>
+					<input type="text" id="versionRangeNext" asp-for="NextVersion" class="form-control" placeholder="Next version" />
+					<span asp-validation-for="NextVersion" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="versionRangeIncrementBy">Increment by</label>
+					<select id="versionRangeIncrementBy" asp-for="IncrementBy" asp-items="@ViewBag.VersionComponents" class="form-control">
+						<option value="">Select a version component to increment by</option>
+					</select>
+					<span asp-validation-for="IncrementBy" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-default">Save</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>

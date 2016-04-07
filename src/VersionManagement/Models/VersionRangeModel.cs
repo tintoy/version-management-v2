@@ -28,21 +28,21 @@ namespace DD.Cloud.VersionManagement.Models
 		/// </summary>
 		[ModelBinder(BinderType = typeof(VersionModelBinder))]
 		[Required(ErrorMessage = "Version range must have a starting version")]
-		public string StartVersion { get; set; }
+		public Version StartVersion { get; set; }
 
 		/// <summary>
 		///		The last available version in the range.
 		/// </summary>
 		[ModelBinder(BinderType = typeof(VersionModelBinder))]
 		[Required(ErrorMessage = "Version range must have an ending version")]
-		public string EndVersion { get; set; }
+		public Version EndVersion { get; set; }
 
 		/// <summary>
 		///		The next available version in the range.
 		/// </summary>
 		[ModelBinder(BinderType = typeof(VersionModelBinder))]
 		[Required(ErrorMessage = "Version range must have a next version")]
-		public string NextVersion { get; set; }
+		public Version NextVersion { get; set; }
 
 		/// <summary>
 		///		The version component by which the range is incremented when allocating a new version.
@@ -61,9 +61,9 @@ namespace DD.Cloud.VersionManagement.Models
 			{
 				Id = Id,
 				Name = Name,
-				StartVersion = new Version(StartVersion),
-				EndVersion = new Version(EndVersion),
-				NextVersion = new Version(NextVersion),
+				StartVersion = StartVersion,
+				EndVersion = EndVersion,
+				NextVersion = NextVersion,
 				IncrementBy = IncrementBy
 			};
 		}
@@ -83,9 +83,9 @@ namespace DD.Cloud.VersionManagement.Models
 				throw new InvalidOperationException($"Cannot update version range data for version range {versionRangeData.Id} from model for version range {Id} (Ids do not match).");
 
 			versionRangeData.Name = Name;
-			versionRangeData.StartVersion = new Version(StartVersion);
-			versionRangeData.EndVersion = new Version(EndVersion);
-			versionRangeData.NextVersion = new Version(NextVersion);
+			versionRangeData.StartVersion = StartVersion;
+			versionRangeData.EndVersion = EndVersion;
+			versionRangeData.NextVersion = NextVersion;
 			versionRangeData.IncrementBy = IncrementBy;
 		}
 
@@ -107,9 +107,9 @@ namespace DD.Cloud.VersionManagement.Models
 			{
 				Id = versionRangeData.Id,
 				Name = versionRangeData.Name,
-				StartVersion = versionRangeData.StartVersion.ToString(),
-				EndVersion = versionRangeData.EndVersion.ToString(),
-				NextVersion = versionRangeData.NextVersion.ToString(),
+				StartVersion = versionRangeData.StartVersion,
+				EndVersion = versionRangeData.EndVersion,
+				NextVersion = versionRangeData.NextVersion,
 				IncrementBy = versionRangeData.IncrementBy
 			};
 		}

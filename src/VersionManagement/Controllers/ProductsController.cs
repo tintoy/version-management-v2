@@ -37,7 +37,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		}
 
 		/// <summary>
-		///		Show all products.
+		///		Display all products.
 		/// </summary>
 		/// <returns>
 		///		An action result that renders the product index view.

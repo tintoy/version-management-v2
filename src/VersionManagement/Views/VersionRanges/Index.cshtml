@@ -1,0 +1,48 @@
+﻿@using DD.Cloud.VersionManagement.Models
+@model IEnumerable<VersionRangeModel>
+
+@{
+	ViewBag.Title = "Version ranges";
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Start</th>
+					<th>End</th>
+					<th>Next</th>
+					<th>Increments by</th>
+					<th>Links</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (VersionRangeModel versionRange in Model)
+				{
+					<tr>
+						<td>
+							<a asp-action="DetailById" asp-route-versionRangeId="@versionRange.Id">@versionRange.Name</a>
+						</td>
+						<td>
+							@versionRange.StartVersion
+						</td>
+						<td>
+							@versionRange.EndVersion
+						</td>
+						<td>
+							@versionRange.NextVersion
+						</td>
+						<td>
+							@versionRange.IncrementBy
+						</td>
+						<td>
+							<a asp-action="Edit" asp-route-versionRangeId="@versionRange.Id">Edit</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
