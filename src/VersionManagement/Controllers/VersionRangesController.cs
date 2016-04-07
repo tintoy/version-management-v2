@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
-	using System;
 	using DataAccess;
 	using DataAccess.Models;
-	using Microsoft.AspNet.Mvc.Rendering;
-	using Microsoft.Data.Entity;
 	using Models;
 
 	/// <summary>
@@ -15,7 +14,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 	/// </summary>
 	[Route("version-ranges")]
 	public class VersionRangesController
-		: Controller
+		: ControllerBase
 	{
 		/// <summary>
 		///		The version-management entity context.
@@ -31,10 +30,14 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <param name="entities">
 		///		The version-management entity context.
 		/// </param>
-		public VersionRangesController(VersionManagementEntities entities)
+		/// <param name="log">
+		///		The controller's log facility.
+		/// </param>
+		public VersionRangesController(VersionManagementEntities entities, ILogger<VersionRangesController> log)
+			: base(log)
 		{
 			if (entities == null)
-				throw new System.ArgumentNullException(nameof(entities));
+				throw new ArgumentNullException(nameof(entities));
 
 			_entities = entities;
 		}
@@ -51,7 +54,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				_entities.VersionRanges
 					.OrderBy(versionRange => versionRange.Name)
 					.AsEnumerable()
-					.Select(versionRange => VersionRangeModel.FromData(versionRange))
+					.Select(VersionRangeModel.FromData)
 					.ToArray();
 
 			return View(versionRanges);
@@ -98,7 +101,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (versionRangeData == null)
 				return HttpNotFound($"No version range was found with Id {versionRangeId}");
 
-			ViewBag.VersionComponents = GetVersionComponentSelectList(versionRangeData.IncrementBy);
+			ViewBag.VersionComponents = SelectLists.VersionComponents(versionRangeData.IncrementBy);
 
 			return View(
 				VersionRangeModel.FromData(versionRangeData)
@@ -123,7 +126,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (model == null)
 				throw new ArgumentNullException(nameof(model));
 
-			ViewBag.VersionComponents = GetVersionComponentSelectList(model.IncrementBy);
+			ViewBag.VersionComponents = SelectLists.VersionComponents(model.IncrementBy);
 
 			if (!ModelState.IsValid)
 				return View(model);
@@ -162,35 +165,6 @@ namespace DD.Cloud.VersionManagement.Controllers
 			_entities.SaveChanges();
 
 			return RedirectToAction("Index");
-		}
-
-		/// <summary>
-		///		Create a <see cref="SelectList"/> containing all possible <see cref="VersionComponent"/>s.
-		/// </summary>
-		/// <param name="selectedVersionComponent">
-		///		The currently-selected version component (if any).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="SelectList"/>.
-		/// </returns>
-		static SelectList GetVersionComponentSelectList(VersionComponent? selectedVersionComponent = null)
-		{
-			var versionComponentOptions =
-				Enum.GetValues(typeof(VersionComponent))
-					.Cast<VersionComponent>()
-					.Where(versionComponent => versionComponent != VersionComponent.Unknown)
-					.Select(versionComponent => new
-					{
-						Name = versionComponent.ToString(),
-						Value = versionComponent
-					})
-					.ToArray();
-
-			return new SelectList(versionComponentOptions,
-				dataValueField: "Value",
-				dataTextField: "Name",
-				selectedValue: selectedVersionComponent
-			);
 		}
 	}
 }

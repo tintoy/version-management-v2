@@ -5,6 +5,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 {
 	using DataAccess;
 	using DataAccess.Models;
+	using Microsoft.Extensions.Logging;
 	using Models;
 
 	/// <summary>
@@ -12,7 +13,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 	/// </summary>
 	[Route("products")]
 	public class ProductsController
-		: Controller
+		: ControllerBase
 	{
 		/// <summary>
 		///		The version-management entity context.
@@ -28,7 +29,11 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <param name="entities">
 		///		The version-management entity context.
 		/// </param>
-		public ProductsController(VersionManagementEntities entities)
+		/// <param name="log">
+		///		The controller's log facility.
+		/// </param>
+		public ProductsController(VersionManagementEntities entities, ILogger<ProductsController> log)
+			: base(log)
 		{
 			if (entities == null)
 				throw new System.ArgumentNullException(nameof(entities));

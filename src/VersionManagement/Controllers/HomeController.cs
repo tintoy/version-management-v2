@@ -1,6 +1,5 @@
-using System;
-using DD.Cloud.VersionManagement.DataAccess;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
@@ -9,12 +8,16 @@ namespace DD.Cloud.VersionManagement.Controllers
 	/// </summary>
 	[Route("")]
 	public class HomeController
-		: Controller
+		: ControllerBase
 	{
 		/// <summary>
 		///		Create a new <see cref="HomeController"/>.
 		/// </summary>
-		public HomeController()
+		/// <param name="log">
+		///		The controller's log facility.
+		/// </param>
+		public HomeController(ILogger<HomeController> log)
+			: base(log)
 		{
 		}
 

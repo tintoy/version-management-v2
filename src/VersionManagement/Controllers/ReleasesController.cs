@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
 	using DataAccess;
 	using DataAccess.Models;
-	using Microsoft.AspNet.Mvc.Rendering;
-	using Microsoft.Extensions.Logging;
 	using Models;
 
 	/// <summary>
@@ -133,8 +132,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("create")]
 		public IActionResult Create()
 		{
-			ViewBag.Products = GetProductSelectList();
-			ViewBag.VersionRanges = GetVersionRangeSelectList();
+			ViewBag.Products = SelectLists.Products(_entities);
+			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities);
 
 			return View(
 				new ReleaseModel()
@@ -156,8 +155,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (model == null)
 				throw new System.ArgumentNullException(nameof(model));
 
-			ViewBag.Products = GetProductSelectList(model.ProductId);
-			ViewBag.VersionRanges = GetVersionRangeSelectList(model.VersionRangeId);
+			ViewBag.Products = SelectLists.Products(_entities, model.ProductId);
+			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities, model.VersionRangeId);
 
 			if (!ModelState.IsValid)
 				return View(model);
@@ -218,8 +217,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (releaseData == null)
 				return HttpNotFound($"No release was found with Id {releaseId}");
 
-			ViewBag.Products = GetProductSelectList(releaseData.ProductId);
-			ViewBag.VersionRanges = GetVersionRangeSelectList(releaseData.VersionRangeId);
+			ViewBag.Products = SelectLists.Products(_entities, releaseData.ProductId);
+			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities, releaseData.VersionRangeId);
 
 			return View(
 				ReleaseModel.FromData(releaseData)
@@ -246,8 +245,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 
 			if (!ModelState.IsValid)
 			{
-				ViewBag.Products = GetProductSelectList(model.ProductId);
-				ViewBag.VersionRanges = GetVersionRangeSelectList(model.VersionRangeId);
+				ViewBag.Products = SelectLists.Products(_entities, model.ProductId);
+				ViewBag.VersionRanges = SelectLists.VersionRanges(_entities, model.VersionRangeId);
 
 				return View(model);
 			}
@@ -262,52 +261,6 @@ namespace DD.Cloud.VersionManagement.Controllers
 			_entities.SaveChanges();
 
 			return RedirectToAction("Index");
-		}
-
-		/// <summary>
-		///		Create a <see cref="SelectList"/> containing all products.
-		/// </summary>
-		/// <param name="selectedProductId">
-		///		The Id of the currently-selected product (if any).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="SelectList"/>.
-		/// </returns>
-		SelectList GetProductSelectList(int? selectedProductId = null)
-		{
-			ProductData[] products =
-				_entities.Products.AsNoTracking()
-					.OrderBy(product => product.Name)
-					.ToArray();
-
-			return new SelectList(products,
-				dataValueField: "Id",
-				dataTextField: "Name",
-				selectedValue: selectedProductId
-			);
-		}
-
-		/// <summary>
-		///		Create a <see cref="SelectList"/> containing all version ranges.
-		/// </summary>
-		/// <param name="selectedVersionRangeId">
-		///		The Id of the currently-selected version range (if any).
-		/// </param>
-		/// <returns>
-		///		The new <see cref="SelectList"/>.
-		/// </returns>
-		SelectList GetVersionRangeSelectList(int? selectedVersionRangeId = null)
-		{
-			VersionRangeData[] versionRanges =
-				_entities.VersionRanges.AsNoTracking()
-					.OrderBy(versionRange => versionRange.Name)
-					.ToArray();
-
-			return new SelectList(versionRanges,
-				dataValueField: "Id",
-				dataTextField: "Name",
-				selectedValue: selectedVersionRangeId
-			);
 		}
 	}
 }
