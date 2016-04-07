@@ -17,8 +17,18 @@
 				<div class="form-group">
 					<label for="releaseProduct">Product</label>
 					<div id="releaseProduct" class="form-control">
-						<a asp-controller="Products" asp-action="DetailById" asp-route-productId="@Model.Id">@Model.Product.Name</a>
+						<a asp-controller="Products" asp-action="DetailById" asp-route-productId="@Model.ProductId">@Model.Product.Name</a>
 					</div>
+				</div>
+				<div class="form-group">
+					<label for="releaseVersionRange">Version range</label>
+					<div id="releaseVersionRange" class="form-control">
+						<a asp-controller="VersionRanges" asp-action="DetailById" asp-route-versionRangeId="@Model.VersionRangeId">@Model.VersionRange.Name</a>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<a asp-action="Edit" asp-route-releaseId="@Model.Id" class="btn btn-default">Edit</a>
 				</div>
 			</fieldset>
 		</form>

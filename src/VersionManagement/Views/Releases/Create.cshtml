@@ -1,0 +1,48 @@
+﻿@using DD.Cloud.VersionManagement.Models
+@model ReleaseModel
+
+@{
+	ViewBag.Title = "Create release";
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<form role="form" asp-controller="Releases" asp-action="Create" method="POST">
+			<fieldset>
+				<legend>Create Release</legend>
+
+				<div class="form-group">
+					<label for="productName">Name</label>
+					<input type="text" id="productName" asp-for="Name" class="form-control" placeholder="Release name"/>
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="product">Product</label>
+					<select id="product" asp-for="ProductId" asp-items="@ViewBag.Products" class="form-control">
+						<option value="">Select a product</option>
+					</select>
+					<span asp-validation-for="ProductId" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="versionRange">Version range</label>
+					<select id="versionRange" asp-for="VersionRangeId" asp-items="@ViewBag.VersionRanges" class="form-control">
+						<option value="">Select a version range</option>
+					</select>
+					<span asp-validation-for="VersionRangeId" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<label for="specialVersion">Special version tag (optional)</label>
+					<input type="text" id="specialVersion" asp-for="SpecialVersion" class="form-control" placeholder="e.g. 'develop' or 'beta1'" />
+					<span asp-validation-for="Name" class="text-danger"></span>
+				</div>
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-default">Create</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>

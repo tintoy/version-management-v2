@@ -6,7 +6,7 @@ namespace DD.Cloud.VersionManagement.Models
 	using DataAccess.Models;
 
 	/// <summary>
-	///		View model for a user.
+	///		View model for a product.
 	/// </summary>
     public class ProductModel
     {

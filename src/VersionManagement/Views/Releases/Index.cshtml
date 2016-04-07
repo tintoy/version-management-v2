@@ -12,6 +12,9 @@
 				<tr>
 					<th>Name</th>
 					<th>Product</th>
+					<th>Version range</th>
+					<th>Special version</th>
+					<th>Links</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -24,10 +27,23 @@
 						<td>
 							<a asp-action="DetailById" asp-controller="Products" asp-route-productId="@release.ProductId">@release.Product.Name</a>
 						</td>
+						<td>
+							<a asp-action="DetailById" asp-controller="VersionRange" asp-route-productId="@release.VersionRangeId">@release.VersionRange.Name</a>
+						</td>
+						<td>
+							@release.SpecialVersion
+						</td>
+						<td>
+							<a asp-action="Edit" asp-route-releaseId="@release.Id">Edit</a>
+						</td>
 					</tr>
 				}
 			</tbody>
 		</table>
 	</div>
 </div>
-
+<div class="row">
+	<div class="col-md-8 text-right">
+		<a asp-action="Create" class="btn btn-default">Create new release</a>
+	</div>
+</div>

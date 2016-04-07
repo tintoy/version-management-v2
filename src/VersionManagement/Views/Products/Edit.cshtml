@@ -2,14 +2,16 @@
 @model ProductModel
 
 @{
-	ViewBag.Title = "Create product";
+	ViewBag.Title = $"Edit product - '{Model.Name}'";
 }
 
 <div class="row">
 	<div class="col-md-8">
-		<form role="form" asp-controller="Products" asp-action="Create" method="POST">
+		<form role="form" asp-controller="Products" asp-action="Edit" method="POST">
 			<fieldset>
-				<legend>Create product</legend>
+				<legend>Edit product '@Model.Name'</legend>
+
+				<input type="hidden" asp-for="Id" />
 
 				<div class="form-group">
 					<label for="productName">Name</label>
@@ -18,7 +20,7 @@
 				</div>
 
 				<div class="form-group">
-					<button type="submit" class="btn btn-default">Create</button>
+					<button type="submit" class="btn btn-default">Save</button>
 				</div>
 			</fieldset>
 		</form>

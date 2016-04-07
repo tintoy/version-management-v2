@@ -93,31 +93,87 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <summary>
 		///		Handle input from the product creation view.
 		/// </summary>
-		/// <param name="product">
+		/// <param name="model">
 		///		The product model.
 		/// </param>
 		/// <returns>
 		///		An action result that redirects to the product list view.
 		/// </returns>
 		[HttpPost("create")]
-		public IActionResult Create(ProductModel product)
+		public IActionResult Create(ProductModel model)
 		{
 			if (!ModelState.IsValid)
-				return View(product);
+				return View(model);
 
 			ProductData existingProductDataByName = _entities.Products.FirstOrDefault(
-				existingProductData => existingProductData.Name == product.Name
+				existingProductData => existingProductData.Name == model.Name
 			);
 			if (existingProductDataByName != null)
 			{
-				ModelState.AddModelError("Name", $"A product already exists with name '{product.Name}'.");
+				ModelState.AddModelError("Name", $"A product already exists with name '{model.Name}'.");
 
-				return View(product);
+				return View(model);
 			}
 
 			_entities.Products.Add(
-				product.ToData()
+				model.ToData()
 			);
+			_entities.SaveChanges();
+
+			return RedirectToAction("Index");
+		}
+
+		/// <summary>
+		///		Display the product edit view.
+		/// </summary>
+		/// <param name="productId">
+		///		The Id of the product to edit.
+		/// </param>
+		/// <returns>
+		///		An action result that renders the product creation view.
+		/// </returns>
+		[HttpGet("{productId:int}/edit")]
+		public IActionResult Edit(int productId)
+		{
+			ProductData productData = _entities.Products.FirstOrDefault(
+				product => product.Id == productId
+			);
+			if (productData == null)
+				return HttpNotFound($"No product was found with Id {productId}");
+
+			return View(
+				ProductModel.FromData(productData)
+			);
+		}
+
+		/// <summary>
+		///		Handle input from the product edit view.
+		/// </summary>
+		/// <param name="productId">
+		///		The Id of the product being edited.
+		/// </param>
+		/// <param name="model">
+		///		A <see cref="ProductModel"/> representing the product being edited.
+		/// </param>
+		/// <returns>
+		///		An action result that renders the product creation view.
+		/// </returns>
+		[HttpPost("{productId:int}/edit")]
+		public IActionResult Edit(int productId, ProductModel model)
+		{
+			if (model == null)
+				throw new System.ArgumentNullException(nameof(model));
+
+			if (!ModelState.IsValid)
+				return View(model);
+
+			ProductData productData = _entities.Products.FirstOrDefault(
+				product => product.Id == model.Id
+			);
+			if (productData == null)
+				return HttpNotFound($"No product was found with Id {model.Id}");
+
+			model.ToData(productData);
 			_entities.SaveChanges();
 
 			return RedirectToAction("Index");

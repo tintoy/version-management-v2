@@ -15,13 +15,18 @@
 					<label for="productName">Name</label>
 					<div class="form-control" id="productName">@Model.Name</div>
 				</div>
+
+				<div class="form-group">
+					<label for="productReleases">Releases</label>
+					<div class="form-control" id="productReleases">
+						<a asp-controller="Releases" asp-action="IndexByProduct" asp-route-productId="@Model.Id">Releases</a>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<a asp-action="Edit" asp-route-productId="@Model.Id" class="btn btn-default">Edit</a>
+				</div>
 			</fieldset>
 		</form>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-8">
-		<hr/>
-		<a asp-controller="Releases" asp-action="IndexByProduct" asp-route-productId="@Model.Id">Go to releases for @Model.Name</a>
 	</div>
 </div>

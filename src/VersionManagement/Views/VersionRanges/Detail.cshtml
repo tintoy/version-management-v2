@@ -1,0 +1,37 @@
+﻿@using DD.Cloud.VersionManagement.Models
+@model VersionRangeModel
+
+@{
+	ViewBag.Title = "Version range - " + @Model.Name;
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<form role="form">
+			<fieldset>
+				<legend>Version range "@Model.Name"</legend>
+
+				<div class="form-group">
+					<label for="versionRangeName">Name</label>
+					<div class="form-control" id="versionRangeName">@Model.Name</div>
+				</div>
+				<div class="form-group">
+					<label for="versionRangeStart">Starting version</label>
+					<div class="form-control" id="versionRangeStart">@Model.StartVersion</div>
+				</div>
+				<div class="form-group">
+					<label for="versionRangeEnd">Ending version</label>
+					<div class="form-control" id="versionRangeEnd">@Model.EndVersion</div>
+				</div>
+				<div class="form-group">
+					<label for="versionRangeNext">Next version</label>
+					<div class="form-control" id="versionRangeNext">@Model.NextVersion</div>
+				</div>
+				<div class="form-group">
+					<label for="versionRangeIncrementBy">Increments by</label>
+					<div class="form-control" id="versionRangeIncrementBy">@Model.IncrementBy</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>

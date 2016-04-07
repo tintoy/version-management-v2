@@ -96,7 +96,7 @@ namespace DD.Cloud.VersionManagement
 
 			VersionRangeData versionRange1 = new VersionRangeData
 			{
-				Name = "Product1",
+				Name = "Product1 R1.0",
 				StartVersion = new Version("1.0.0.0"),
 				EndVersion = new Version("1.0.9999.0"),
 				NextVersion = new Version("1.0.0.0"),
@@ -106,7 +106,7 @@ namespace DD.Cloud.VersionManagement
 
 			VersionRangeData versionRange2 = new VersionRangeData
 			{
-				Name = "Product2",
+				Name = "Product2 R1.5",
 				StartVersion = new Version("1.5.0.0"),
 				EndVersion = new Version("1.5.9999.0"),
 				NextVersion = new Version("1.5.0.0"),

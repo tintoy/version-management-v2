@@ -22,6 +22,8 @@
 							<a asp-action="DetailById" asp-route-productId="@product.Id">@product.Name</a>
 						</td>
 						<td>
+							<a asp-action="Edit" asp-route-productId="@product.Id">Edit</a>
+							|
 							<a asp-action="IndexByProduct" asp-controller="Releases" asp-route-productId="@product.Id">Releases</a>
 						</td>
 					</tr>
