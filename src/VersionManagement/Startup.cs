@@ -9,13 +9,13 @@ using System.Linq;
 
 namespace DD.Cloud.VersionManagement
 {
-    using DataAccess;
-    using DataAccess.Models;
+	using DataAccess;
+	using DataAccess.Models;
 
-    /// <summary>
-    ///    Configuration logic for the version-management application.
-    /// </summary>
-    public sealed class Startup
+	/// <summary>
+	///    Configuration logic for the version-management application.
+	/// </summary>
+	public sealed class Startup
 	{
 		/// <summary>
 		///   Configure / register components and services.
@@ -27,8 +27,8 @@ namespace DD.Cloud.VersionManagement
 		{
 			if (services == null)
 				throw new ArgumentNullException(nameof(services));
-                
-            services.AddLogging();
+				
+			services.AddLogging();
 
 			services.AddEntityFramework()
 				.AddSqlite()
@@ -56,7 +56,7 @@ namespace DD.Cloud.VersionManagement
 		/// <param name="app">
 		///     The application pipeline builder.
 		/// </param>
-        /// <param name="loggerFactory">
+		/// <param name="loggerFactory">
 		///     The application-level logger factory.
 		/// </param>
 		public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
@@ -64,8 +64,8 @@ namespace DD.Cloud.VersionManagement
 			if (app == null)
 				throw new ArgumentNullException(nameof(app));
 
-            loggerFactory.AddConsole(LogLevel.Warning);
-            
+			loggerFactory.AddConsole(LogLevel.Warning);
+			
 			app.UseDeveloperExceptionPage();
 
 			// Ensure database is created / upgraded at startup.

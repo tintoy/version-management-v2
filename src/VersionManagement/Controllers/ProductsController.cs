@@ -2,57 +2,40 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
-    using DataAccess;
-    using DataAccess.Models;
-    using Models;
+	using DataAccess;
+	using Models;
 
-    /// <summary>
-    ///		The products controller.
-    /// </summary>
-    [Route("products")]
+	/// <summary>
+	///		The products controller.
+	/// </summary>
+	[Route("products")]
 	public class ProductsController
 		: ControllerBase
 	{
 		/// <summary>
-		///		The version-management entity context.
+		///     The version-management data access facility.
 		/// </summary>
-		/// <remarks>
-		///		TODO: Switch to using <see cref="IVersionManagementData"/> (and move required functionality into it).
-		/// </remarks>
-		readonly VersionManagementEntities  _entities;
-
-        /// <summary>
-        ///     The version-management data access facility.
-        /// </summary>
-        readonly IVersionManagementData     _data;
+		readonly IVersionManagementData     _data;
 
 		/// <summary>
 		///		Create a new <see cref="ProductsController"/>.
 		/// </summary>
-		/// <param name="entities">
-		///		The version-management entity context.
-		/// </param>
-        /// <param name="data">
+		/// <param name="data">
 		///		The version-management data access facility.
 		/// </param>
 		/// <param name="log">
 		///		The controller's log facility.
 		/// </param>
-		public ProductsController(VersionManagementEntities entities, IVersionManagementData data, ILogger<ProductsController> log)
+		public ProductsController(IVersionManagementData data, ILogger<ProductsController> log)
 			: base(log)
 		{
-			if (entities == null)
-				throw new ArgumentNullException(nameof(entities));
-                
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-
-			_entities = entities;
-            _data = data;
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+				
+			_data = data;
 		}
 
 		/// <summary>
@@ -65,7 +48,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		public IActionResult Index()
 		{
 			IReadOnlyList<ProductModel> products = _data.GetAllProducts();
-            
+			
 			return View(products);
 		}
 
@@ -121,18 +104,18 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (existingProductByName != null)
 			{
 				ModelState.AddModelError(nameof(model.Name),
-                    $"A product already exists with name '{model.Name}'."
-                );
+					$"A product already exists with name '{model.Name}'."
+				);
 
 				return View(model);
 			}
 
-            ProductModel newProduct = _data.CreateProduct(model.Name);
-            
-            Log.LogInformation("Created new product '{ProductName}' (Id = {ProductId}).",
-                newProduct.Name,
-                newProduct.Id
-            );
+			ProductModel newProduct = _data.CreateProduct(model.Name);
+			
+			Log.LogInformation("Created new product '{ProductName}' (Id = {ProductId}).",
+				newProduct.Name,
+				newProduct.Id
+			);
 
 			return RedirectToAction("Index");
 		}
@@ -149,15 +132,11 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("{productId:int}/edit")]
 		public IActionResult Edit(int productId)
 		{
-			ProductData productData = _entities.Products.FirstOrDefault(
-				product => product.Id == productId
-			);
-			if (productData == null)
+			ProductModel product = _data.GetProductById(productId);
+			if (product == null)
 				return HttpNotFound($"No product was found with Id {productId}");
 
-			return View(
-				ProductModel.FromData(productData)
-			);
+			return View(product);
 		}
 
 		/// <summary>
@@ -176,19 +155,16 @@ namespace DD.Cloud.VersionManagement.Controllers
 		public IActionResult Edit(int productId, ProductModel model)
 		{
 			if (model == null)
-				throw new System.ArgumentNullException(nameof(model));
+				throw new ArgumentNullException(nameof(model));
 
 			if (!ModelState.IsValid)
 				return View(model);
 
-			ProductData productData = _entities.Products.FirstOrDefault(
-				product => product.Id == model.Id
-			);
-			if (productData == null)
-				return HttpNotFound($"No product was found with Id {model.Id}");
+			model.Id = productId;
 
-			model.ToData(productData);
-			_entities.SaveChanges();
+			ProductModel updatedProduct = _data.UpdateProduct(model);
+			if (updatedProduct == null)
+				return HttpNotFound($"No product was found with Id {model.Id}");
 
 			return RedirectToAction("Index");
 		}

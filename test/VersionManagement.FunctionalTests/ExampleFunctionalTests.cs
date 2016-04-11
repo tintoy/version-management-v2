@@ -15,11 +15,11 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 	///		Some example functional tests.
 	/// </summary>
 	public class ExampleFunctionalTests
-    {
-        /// <summary>
-        ///     The application pipeline builder for end-to-end tests.
-        /// </summary>
-        readonly WebHostBuilder TestAppBuilder =
+	{
+		/// <summary>
+		///     The application pipeline builder for end-to-end tests.
+		/// </summary>
+		readonly WebHostBuilder TestAppBuilder =
 			TestServer
 				.CreateBuilder()
 				.UseServices(services =>
@@ -36,7 +36,7 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 					);
 				})
 				.UseStartup<Startup>();
-        
+		
 		/// <summary>
 		///		Verify that the home page can be retrieved.
 		/// </summary>
@@ -52,10 +52,10 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 				using (HttpResponseMessage response = await testClient.GetAsync("/"))
 				{
 					response.EnsureSuccessStatusCode();
-                    
-                    Assert.Equal("text/plain",
-                        response.Content.Headers.ContentType.MediaType
-                    );
+					
+					Assert.Equal("text/plain",
+						response.Content.Headers.ContentType.MediaType
+					);
 				}
 			}
 		}
