@@ -49,10 +49,11 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		public IReadOnlyList<ProductModel> GetProducts()
 		{
 			return
-				_entityContext.Products
-					.OrderBy(product => product.Name)
-					.Select(product => ProductModel.FromData(product))
-					.ToArray();
+				ProductModel.FromData(
+					_entityContext.Products
+						.OrderBy(product => product.Name)
+				)
+				.ToArray();
 		}
 		
 		/// <summary>
@@ -168,11 +169,12 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			if (productId.HasValue)
 				releases = releases.Where(release => release.ProductId == productId);
 				
-			return releases
-				.OrderBy(release => release.Product.Name)
-				.ThenBy(release => release.Name)
-				.AsEnumerable()
-				.Select(release => ReleaseSummaryModel.FromData(release))
+			return
+				ReleaseSummaryModel.FromData(
+					releases
+						.OrderBy(release => release.Product.Name)
+						.ThenBy(release => release.Name)
+				)
 				.ToArray();
 		}
 		

@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Models
 {
-	using DataAccess.Models;
+    using DataAccess.Models;
 
-	/// <summary>
-	///		View model for a product.
-	/// </summary>
+    /// <summary>
+    ///		View model for a product.
+    /// </summary>
     public class ProductModel
     {
 		/// <summary>
@@ -72,6 +74,25 @@ namespace DD.Cloud.VersionManagement.Models
 				Id = productData.Id,
 				Name = productData.Name
 			};
+		}
+		
+		/// <summary>
+		///		Create a sequence of <see cref="ProductModel"/>s from the specified <see cref="ProductData"/>.
+		/// </summary>
+		/// <param name="productData">
+		///		The product persistence models.
+		/// </param>
+		/// <returns>
+		///		A sequence of <see cref="ProductModel"/>.
+		/// </returns>
+		public static IEnumerable<ProductModel> FromData(IEnumerable<ProductData> productData)
+		{
+			if (productData == null)
+				throw new ArgumentNullException(nameof(productData));
+				
+			return productData.Select(
+				data => FromData(data)
+			);
 		}
     }
 }

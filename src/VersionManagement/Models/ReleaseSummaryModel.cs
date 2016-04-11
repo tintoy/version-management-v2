@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Models
 {
@@ -51,6 +53,25 @@ namespace DD.Cloud.VersionManagement.Models
 				VersionRangeName = releaseData.VersionRange.Name,
 				SpecialVersion = releaseData.SpecialVersion
 			};
+		}
+		
+		/// <summary>
+		///		Create a sequence of <see cref="ReleaseSummaryModel"/>s from the specified <see cref="ReleaseSummaryData"/>.
+		/// </summary>
+		/// <param name="releaseData">
+		///		The product persistence models.
+		/// </param>
+		/// <returns>
+		///		A sequence of <see cref="ReleaseSummaryModel"/>.
+		/// </returns>
+		public static new IEnumerable<ReleaseSummaryModel> FromData(IEnumerable<ReleaseData> releaseData)
+		{
+			if (releaseData == null)
+				throw new ArgumentNullException(nameof(releaseData));
+				
+			return releaseData.Select(
+				data => FromData(data)
+			);
 		}
     }
 }

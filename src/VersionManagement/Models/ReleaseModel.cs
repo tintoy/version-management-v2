@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Models
 {
-	using DataAccess.Models;
+    using DataAccess.Models;
 
-	/// <summary>
-	///		Summary view model for a release.
-	/// </summary>
+    /// <summary>
+    ///		Summary view model for a release.
+    /// </summary>
     public class ReleaseModel
     {
 		/// <summary>
@@ -110,6 +112,25 @@ namespace DD.Cloud.VersionManagement.Models
 				VersionRangeId = releaseData.VersionRangeId,
 				SpecialVersion = releaseData.SpecialVersion
 			};
+		}
+		
+		/// <summary>
+		///		Create a sequence of <see cref="ReleaseModel"/>s from the specified <see cref="ReleaseData"/>s.
+		/// </summary>
+		/// <param name="releaseData">
+		///		The release persistence models.
+		/// </param>
+		/// <returns>
+		///		A sequence of <see cref="ReleaseModel"/>s.
+		/// </returns>
+		public static IEnumerable<ReleaseModel> FromData(IEnumerable<ReleaseData> releaseData)
+		{
+			if (releaseData == null)
+				throw new ArgumentNullException(nameof(releaseData));
+				
+			return releaseData.Select(
+				data => FromData(data)
+			);
 		}
     }
 }
