@@ -5,12 +5,13 @@ using System.Linq;
 
 namespace DD.Cloud.VersionManagement.DataAccess
 {
-	using Models;
+    using DD.Cloud.VersionManagement.Models;
+    using Models;
 
-	/// <summary>
-	///		The version-management data access facility.
-	/// </summary>
-	public sealed class VersionManagementData
+    /// <summary>
+    ///		The version-management data access facility.
+    /// </summary>
+    public sealed class VersionManagementData
 		: IVersionManagementData, IDisposable
 	{
 		/// <summary>
@@ -36,6 +37,82 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		Dispose of resources being used by the data-access API.
 		/// </summary>
 		public void Dispose() => _entityContext.Dispose();
+        
+        /// <summary>
+        ///     Get all known products.
+        /// </summary>
+        /// <returns>
+        ///     A read-only list of <see cref="ProductModel"/>s represdenting the products (sorted by name).
+        /// </returns>
+        public IReadOnlyList<ProductModel> GetAllProducts()
+        {
+            return
+                _entityContext.Products
+                    .OrderBy(product => product.Name)
+					.Select(product => ProductModel.FromData(product))
+					.ToArray();
+        }
+        
+        /// <summary>
+        ///     Get a specific product by Id.
+        /// </summary>
+        /// <returns>
+        ///     A <see cref="ProductModel"/> representing the product, or <c>null</c> if no product was found with the specified Id.
+        /// </returns>
+        public ProductModel GetProductById(int productId)
+        {
+            ProductData productById = _entityContext.Products.FirstOrDefault(
+				product => product.Id == productId
+			);
+            if (productById == null)
+                return null;
+                
+            return ProductModel.FromData(productById);
+        }
+
+        /// <summary>
+        ///     Get a specific product by name.
+        /// </summary>
+        /// <returns>
+        ///     A <see cref="ProductModel"/> representing the product, or <c>null</c> if no product was found with the specified name.
+        /// </returns>
+        public ProductModel GetProductByName(string productName)
+        {
+            if (productName == null)
+                throw new ArgumentNullException(nameof(productName));
+            
+            ProductData productByName = _entityContext.Products.FirstOrDefault(
+				product => product.Name == productName
+			);
+            if (productByName == null)
+                return null;
+                
+            return ProductModel.FromData(productByName);
+        }
+        
+        /// <summary>
+        ///     Create a new product.
+        /// </summary>
+        /// <param name="productName">
+        ///     The name for the new product.
+        /// </param>
+        /// <returns>
+        ///     A <see cref="ProductModel"/> representing the new product.
+        /// </returns>
+        public ProductModel CreateProduct(string productName)
+        {
+            if (String.IsNullOrWhiteSpace(productName))
+                throw new ArgumentException("Argument cannot be null, empty, or entirely composed of whitespace.", nameof(productName));
+                
+            ProductData productData = new ProductData
+            {
+                Name = productName
+            };
+            _entityContext.Products.Add(productData);
+			_entityContext.SaveChanges();
+            
+            return ProductModel.FromData(productData);
+        }
 
 		/// <summary>
 		///		Get the <see cref="ReleaseVersionData"/> (if it exists) for the specified combination of product, release, and commit Id.

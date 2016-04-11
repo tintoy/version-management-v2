@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
 {
-	using DataAccess;
-	using DataAccess.Models;
-	using Microsoft.Extensions.Logging;
-	using Models;
+    using DataAccess;
+    using DataAccess.Models;
+    using Models;
 
-	/// <summary>
-	///		The products controller.
-	/// </summary>
-	[Route("products")]
+    /// <summary>
+    ///		The products controller.
+    /// </summary>
+    [Route("products")]
 	public class ProductsController
 		: ControllerBase
 	{
@@ -21,7 +23,12 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <remarks>
 		///		TODO: Switch to using <see cref="IVersionManagementData"/> (and move required functionality into it).
 		/// </remarks>
-		readonly VersionManagementEntities _entities;
+		readonly VersionManagementEntities  _entities;
+
+        /// <summary>
+        ///     The version-management data access facility.
+        /// </summary>
+        readonly IVersionManagementData     _data;
 
 		/// <summary>
 		///		Create a new <see cref="ProductsController"/>.
@@ -29,16 +36,23 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <param name="entities">
 		///		The version-management entity context.
 		/// </param>
+        /// <param name="data">
+		///		The version-management data access facility.
+		/// </param>
 		/// <param name="log">
 		///		The controller's log facility.
 		/// </param>
-		public ProductsController(VersionManagementEntities entities, ILogger<ProductsController> log)
+		public ProductsController(VersionManagementEntities entities, IVersionManagementData data, ILogger<ProductsController> log)
 			: base(log)
 		{
 			if (entities == null)
-				throw new System.ArgumentNullException(nameof(entities));
+				throw new ArgumentNullException(nameof(entities));
+                
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
 
 			_entities = entities;
+            _data = data;
 		}
 
 		/// <summary>
@@ -50,11 +64,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("")]
 		public IActionResult Index()
 		{
-			ProductModel[] products =
-				_entities.Products
-					.Select(productData => ProductModel.FromData(productData))
-					.ToArray();
-
+			IReadOnlyList<ProductModel> products = _data.GetAllProducts();
+            
 			return View(products);
 		}
 
@@ -70,15 +81,11 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("{productId:int}", Name = "ProductById")]
 		public IActionResult DetailById(int productId)
 		{
-			ProductData productById = _entities.Products.FirstOrDefault(
-				product => product.Id == productId
-			);
+			ProductModel productById = _data.GetProductById(productId);
 			if (productById == null)
 				return HttpNotFound($"No product found with Id {productId}.");
 
-			return View("Detail",
-				ProductModel.FromData(productById)
-			);
+			return View("Detail", productById);
 		}
 
 		/// <summary>
@@ -110,20 +117,22 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			ProductData existingProductDataByName = _entities.Products.FirstOrDefault(
-				existingProductData => existingProductData.Name == model.Name
-			);
-			if (existingProductDataByName != null)
+			ProductModel existingProductByName = _data.GetProductByName(model.Name);
+			if (existingProductByName != null)
 			{
-				ModelState.AddModelError("Name", $"A product already exists with name '{model.Name}'.");
+				ModelState.AddModelError(nameof(model.Name),
+                    $"A product already exists with name '{model.Name}'."
+                );
 
 				return View(model);
 			}
 
-			_entities.Products.Add(
-				model.ToData()
-			);
-			_entities.SaveChanges();
+            ProductModel newProduct = _data.CreateProduct(model.Name);
+            
+            Log.LogInformation("Created new product '{ProductName}' (Id = {ProductId}).",
+                newProduct.Name,
+                newProduct.Id
+            );
 
 			return RedirectToAction("Index");
 		}
