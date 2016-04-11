@@ -6,7 +6,7 @@ namespace DD.Cloud.VersionManagement.Models
 	using DataAccess.Models;
 
 	/// <summary>
-	///		View model for a release.
+	///		Summary view model for a release.
 	/// </summary>
     public class ReleaseModel
     {
@@ -68,7 +68,7 @@ namespace DD.Cloud.VersionManagement.Models
 		/// <param name="releaseData">
 		///		The <see cref="ReleaseData"/> to update.
 		/// </param>
-		public void ToData(ReleaseData releaseData)
+		public virtual void ToData(ReleaseData releaseData)
 		{
 			if (releaseData == null)
 				throw new ArgumentNullException(nameof(releaseData));

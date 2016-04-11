@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
@@ -19,27 +21,39 @@ namespace DD.Cloud.VersionManagement.Controllers
 		/// <summary>
 		///		The version-management entity context.
 		/// </summary>
-		readonly VersionManagementEntities		_entities;
+		readonly VersionManagementEntities	_entities;
+		
+		/// <summary>
+		///     The version-management data access facility.
+		/// </summary>
+		readonly IVersionManagementData		_data;
 
 		/// <summary>
 		///		Create a new <see cref="ReleasesController"/>.
 		/// </summary>
-		/// <param name="log">
-		///		The logging facility for the releases controller.
+		/// <param name="data">
+		///		The version-management data access facility.
 		/// </param>
 		/// <param name="entities">
 		///		The version-management entity context.
 		/// </param>
-		public ReleasesController(ILogger<ReleasesController> log, VersionManagementEntities entities)
+		/// <param name="log">
+		///		The logging facility for the releases controller.
+		/// </param>
+		public ReleasesController(IVersionManagementData data, VersionManagementEntities entities, ILogger<ReleasesController> log)
 		{
-			if (log == null)
-				throw new System.ArgumentNullException(nameof(log));
-
+			if (data == null)
+				throw new ArgumentNullException(nameof(data));
+			
 			if (entities == null)
-				throw new System.ArgumentNullException(nameof(entities));
-
+				throw new ArgumentNullException(nameof(entities));
+			
+			if (log == null)
+				throw new ArgumentNullException(nameof(log));
+				
 			Log = log;
 			_entities = entities;
+			_data = data;
 		}
 
 		/// <summary>
@@ -56,12 +70,8 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("")]
 		public IActionResult Index()
 		{
-			ReleaseData[] releases =
-				_entities.Releases
-					.Include(release => release.Product)
-					.Include(release => release.VersionRange)
-					.ToArray();
-
+			IReadOnlyList<ReleaseSummaryModel> releases = _data.GetReleases();
+			
 			return View(releases);
 		}
 
@@ -77,14 +87,9 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("product/{productId:int}")]
 		public IActionResult IndexByProduct(int productId)
 		{
-			ReleaseData[] releasesByProductId =
-				_entities.Releases
-					.Include(release => release.Product)
-					.Include(release => release.VersionRange)
-					.Where(release => release.ProductId == productId)
-					.ToArray();
-
-			return View("Index", releasesByProductId);
+			IReadOnlyList<ReleaseSummaryModel> releases = _data.GetReleases(productId);
+			
+			return View(releases);
 		}
 
 		/// <summary>

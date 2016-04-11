@@ -10,13 +10,15 @@ namespace DD.Cloud.VersionManagement.DataAccess
 	/// </summary>
 	public interface IVersionManagementData
 	{
+		#region Products
+		
 		/// <summary>
 		///     Get all known products.
 		/// </summary>
 		/// <returns>
 		///     A read-only list of <see cref="ProductModel"/>s represdenting the products (sorted by name).
 		/// </returns>
-		IReadOnlyList<ProductModel> GetAllProducts();
+		IReadOnlyList<ProductModel> GetProducts();
 		
 		/// <summary>
 		///     Get a specific product by Id.
@@ -55,6 +57,23 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		A <see cref="ProductModel"/> representing the updated product, or <c>null</c> if the product was not found by Id.
 		/// </returns>
 		ProductModel UpdateProduct(ProductModel product);
+		
+		#endregion // Products
+		
+		#region Releases
+		
+		/// <summary>
+		/// 	Get all releases (optionally, filtered by product).
+		/// </summary>
+		/// <param name="productId">
+		///		If specified, only retrieve releases that relate to this product.
+		/// </param>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		IReadOnlyList<ReleaseSummaryModel> GetReleases(int? productId = null);
+		
+		#endregion // Releases
 		
 		/// <summary>
 		///		Get the <see cref="ReleaseVersionData"/> (if it exists) for the specified combination of product, release, and commit Id.

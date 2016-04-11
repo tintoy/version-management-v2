@@ -1,5 +1,5 @@
-﻿@using DD.Cloud.VersionManagement.DataAccess.Models
-@model IEnumerable<ReleaseData>
+﻿@using DD.Cloud.VersionManagement.Models
+@model IEnumerable<ReleaseSummaryModel>
 
 @{
 	ViewBag.Title = "Releases";
@@ -18,17 +18,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (ReleaseData release in Model)
+				@foreach (ReleaseSummaryModel release in Model)
 				{
 					<tr>
 						<td>
 							<a asp-action="DetailById" asp-route-releaseId="@release.Id">@release.Name</a>
 						</td>
 						<td>
-							<a asp-action="DetailById" asp-controller="Products" asp-route-productId="@release.ProductId">@release.Product.Name</a>
+							<a asp-action="DetailById" asp-controller="Products" asp-route-productId="@release.ProductId">@release.ProductName</a>
 						</td>
 						<td>
-							<a asp-action="DetailById" asp-controller="VersionRange" asp-route-productId="@release.VersionRangeId">@release.VersionRange.Name</a>
+							<a asp-action="DetailById" asp-controller="VersionRanges" asp-route-versionRangeId="@release.VersionRangeId">@release.VersionRangeName</a>
 						</td>
 						<td>
 							@release.SpecialVersion

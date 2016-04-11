@@ -47,7 +47,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("")]
 		public IActionResult Index()
 		{
-			IReadOnlyList<ProductModel> products = _data.GetAllProducts();
+			IReadOnlyList<ProductModel> products = _data.GetProducts();
 			
 			return View(products);
 		}

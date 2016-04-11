@@ -38,13 +38,15 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		/// </summary>
 		public void Dispose() => _entityContext.Dispose();
 		
+		#region Products
+		
 		/// <summary>
 		///     Get all known products.
 		/// </summary>
 		/// <returns>
 		///     A read-only list of <see cref="ProductModel"/>s represdenting the products (sorted by name).
 		/// </returns>
-		public IReadOnlyList<ProductModel> GetAllProducts()
+		public IReadOnlyList<ProductModel> GetProducts()
 		{
 			return
 				_entityContext.Products
@@ -142,6 +144,41 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			
 			return ProductModel.FromData(productById);
 		}
+		
+		#endregion // Products
+		
+		#region Releases
+		
+		/// <summary>
+		/// 	Get all releases (optionally, filtered by product).
+		/// </summary>
+		/// <param name="productId">
+		///		If specified, only retrieve releases that relate to this product.
+		/// </param>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		public IReadOnlyList<ReleaseSummaryModel> GetReleases(int? productId = null)
+		{
+			IQueryable<ReleaseData> releases =
+				_entityContext.Releases
+					.Include(release => release.Product)
+					.Include(release => release.VersionRange);
+					
+			if (productId.HasValue)
+				releases = releases.Where(release => release.ProductId == productId);
+				
+			return releases
+				.OrderBy(release => release.Product.Name)
+				.ThenBy(release => release.Name)
+				.AsEnumerable()
+				.Select(release => ReleaseSummaryModel.FromData(release))
+				.ToArray();
+		}
+		
+		#endregion // Releases
+
+		#region ReleaseVersions
 
 		/// <summary>
 		///		Get the <see cref="ReleaseVersionData"/> (if it exists) for the specified combination of product, release, and commit Id.
@@ -322,5 +359,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 				)
 				.ToArray();
 		}
+		
+		#endregion // ReleaseVersions
 	}
 }
