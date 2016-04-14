@@ -63,16 +63,46 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		#region Releases
 		
 		/// <summary>
-		/// 	Get all releases (optionally, filtered by product).
+		/// 	Get all releases.
+		/// </summary>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		IReadOnlyList<ReleaseDisplayModel> GetReleases();
+		
+		/// <summary>
+		/// 	Get all releases associated with the specified product.
 		/// </summary>
 		/// <param name="productId">
-		///		If specified, only retrieve releases that relate to this product.
+		///		The product Id.
 		/// </param>
 		/// <returns>
 		///		A read-only list of releases (sorted by release name, then product name).
 		/// </returns>
-		IReadOnlyList<ReleaseSummaryModel> GetReleases(int? productId = null);
+		IReadOnlyList<ReleaseDisplayModel> GetReleasesByProduct(int productId);
 		
+		/// <summary>
+		/// 	Get all releases associated with the specified version range.
+		/// </summary>
+		/// <param name="versionRangeId">
+		///		The version range Id.
+		/// </param>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		IReadOnlyList<ReleaseDisplayModel> GetReleasesByVersionRange(int versionRangeId);
+		
+        /// <summary>
+		/// 	Get a specific release by Id.
+		/// </summary>
+		/// <param name="releaseId">
+		///		The release Id.
+		/// </param>
+		/// <returns>
+		///		A <see cref="ReleaseDisplayModel"/> representing the release, or <c>null<c> if no release was found with the specified Id.
+		/// </returns>
+		ReleaseDisplayModel GetReleaseById(int releaseId);
+        
 		#endregion // Releases
 		
 		/// <summary>

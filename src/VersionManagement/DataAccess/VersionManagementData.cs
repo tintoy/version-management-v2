@@ -151,31 +151,90 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		#region Releases
 		
 		/// <summary>
-		/// 	Get all releases (optionally, filtered by product).
+		/// 	Get all releases.
 		/// </summary>
-		/// <param name="productId">
-		///		If specified, only retrieve releases that relate to this product.
-		/// </param>
 		/// <returns>
 		///		A read-only list of releases (sorted by release name, then product name).
 		/// </returns>
-		public IReadOnlyList<ReleaseSummaryModel> GetReleases(int? productId = null)
+		public IReadOnlyList<ReleaseDisplayModel> GetReleases()
 		{
 			IQueryable<ReleaseData> releases =
 				_entityContext.Releases
 					.Include(release => release.Product)
-					.Include(release => release.VersionRange);
+					.Include(release => release.VersionRange)
+					.OrderBy(release => release.Product.Name)
+					.ThenBy(release => release.Name);
 					
-			if (productId.HasValue)
-				releases = releases.Where(release => release.ProductId == productId);
+			return
+				ReleaseDisplayModel.FromData(releases)
+					.ToArray();
+		}
+		
+		/// <summary>
+		/// 	Get all releases associated with the specified product.
+		/// </summary>
+		/// <param name="productId">
+		///		The product Id.
+		/// </param>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		public IReadOnlyList<ReleaseDisplayModel> GetReleasesByProduct(int productId)
+		{
+			IQueryable<ReleaseData> releases =
+				_entityContext.Releases
+					.Include(release => release.Product)
+					.Include(release => release.VersionRange)
+					.Where(release => release.ProductId == productId)
+					.OrderBy(release => release.Product.Name)
+					.ThenBy(release => release.Name);
+			return
+				ReleaseDisplayModel.FromData(releases)
+					.ToArray();
+		}
+		
+		/// <summary>
+		/// 	Get all releases associated with the specified version range.
+		/// </summary>
+		/// <param name="versionRangeId">
+		///		The version range Id.
+		/// </param>
+		/// <returns>
+		///		A read-only list of releases (sorted by release name, then product name).
+		/// </returns>
+		public IReadOnlyList<ReleaseDisplayModel> GetReleasesByVersionRange(int versionRangeId)
+		{
+			IQueryable<ReleaseData> releases =
+				_entityContext.Releases
+					.Include(release => release.Product)
+					.Include(release => release.VersionRange)
+					.Where(release => release.VersionRangeId == versionRangeId)
+					.OrderBy(release => release.Product.Name)
+					.ThenBy(release => release.Name);
 				
 			return
-				ReleaseSummaryModel.FromData(
-					releases
-						.OrderBy(release => release.Product.Name)
-						.ThenBy(release => release.Name)
-				)
-				.ToArray();
+				ReleaseDisplayModel.FromData(releases)
+					.ToArray();
+		}
+		
+		/// <summary>
+		/// 	Get a specific release by Id.
+		/// </summary>
+		/// <param name="releaseId">
+		///		The release Id.
+		/// </param>
+		/// <returns>
+		///		A <see cref="ReleaseDisplayModel"/> representing the release, or <c>null<c> if no release was found with the specified Id.
+		/// </returns>
+		public ReleaseDisplayModel GetReleaseById(int releaseId)
+		{
+			ReleaseData releaseById =
+				_entityContext.Releases
+					.Include(release => release.Product)
+					.Include(release => release.VersionRange)
+					.FirstOrDefault(release => release.Id == releaseId);
+					
+			return ReleaseDisplayModel.FromData(releaseById);
 		}
 		
 		#endregion // Releases

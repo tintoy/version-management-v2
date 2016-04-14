@@ -70,7 +70,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("")]
 		public IActionResult Index()
 		{
-			IReadOnlyList<ReleaseSummaryModel> releases = _data.GetReleases();
+			IReadOnlyList<ReleaseDisplayModel> releases = _data.GetReleases();
 			
 			return View(releases);
 		}
@@ -87,13 +87,13 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("product/{productId:int}")]
 		public IActionResult IndexByProduct(int productId)
 		{
-			IReadOnlyList<ReleaseSummaryModel> releases = _data.GetReleases(productId);
+			IReadOnlyList<ReleaseDisplayModel> releases = _data.GetReleasesByProduct(productId);
 			
-			return View(releases);
+			return View("Index", releases);
 		}
 
 		/// <summary>
-		///		Show all releases for the specified product.
+		///		Show all releases for the specified version range.
 		/// </summary>
 		/// <param name="versionRangeId">
 		///		The product Id.
@@ -104,27 +104,22 @@ namespace DD.Cloud.VersionManagement.Controllers
 		[HttpGet("version-range/{versionRangeId:int}")]
 		public IActionResult IndexByVersionRange(int versionRangeId)
 		{
-			ReleaseData[] releasesByVersionRangeId =
-				_entities.Releases
-					.Include(release => release.Product)
-					.Include(release => release.VersionRange)
-					.Where(release => release.VersionRangeId == versionRangeId)
-					.ToArray();
+			IReadOnlyList<ReleaseDisplayModel> releases = _data.GetReleasesByVersionRange(versionRangeId);
 
-			return View("Index", releasesByVersionRangeId);
+			return View("Index", releases);
 		}
 
+		/// <summary>
+		///		Render the detail view for a specific release.
+		/// </summary>
+		/// <param name="releaseId">
+		///		The release Id.
+		/// </param>
 		[HttpGet("{releaseId:int}")]
 		public IActionResult DetailById(int releaseId)
 		{
-			ReleaseData releaseById = 
-				_entities.Releases
-					.Include(release => release.Product)
-					.Include(release => release.VersionRange)
-					.FirstOrDefault(release => release.Id == releaseId);
-			if (releaseById == null)
-				return HttpNotFound($"Release {releaseId} not found.");
-
+            ReleaseDisplayModel releaseById = _data.GetReleaseById(releaseId);
+			
 			return View("Detail", releaseById);
 		}
 
@@ -141,7 +136,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities);
 
 			return View(
-				new ReleaseModel()
+				new ReleaseEditModel()
 			);
 		}
 
@@ -155,7 +150,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		///		An action result that redirects to the release list view.
 		/// </returns>
 		[HttpPost("create")]
-		public IActionResult Create(ReleaseModel model)
+		public IActionResult Create(ReleaseEditModel model)
 		{
 			if (model == null)
 				throw new System.ArgumentNullException(nameof(model));
@@ -226,7 +221,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities, releaseData.VersionRangeId);
 
 			return View(
-				ReleaseModel.FromData(releaseData)
+				ReleaseEditModel.FromData(releaseData)
 			);
 		}
 
@@ -237,13 +232,13 @@ namespace DD.Cloud.VersionManagement.Controllers
 		///		The Id of the release being edited.
 		/// </param>
 		/// <param name="model">
-		///		A <see cref="ReleaseModel"/> representing the release being edited.
+		///		A <see cref="ReleaseEditModel"/> representing the release being edited.
 		/// </param>
 		/// <returns>
 		///		An action result that renders the release creation view.
 		/// </returns>
 		[HttpPost("{releaseId:int}/edit")]
-		public IActionResult Edit(int releaseId, ReleaseModel model)
+		public IActionResult Edit(int releaseId, ReleaseEditModel model)
 		{
 			if (model == null)
 				throw new System.ArgumentNullException(nameof(model));

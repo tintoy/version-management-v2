@@ -1,5 +1,5 @@
 ﻿@using DD.Cloud.VersionManagement.Models
-@model IEnumerable<ReleaseSummaryModel>
+@model IEnumerable<ReleaseDisplayModel>
 
 @{
 	ViewBag.Title = "Releases";
@@ -18,7 +18,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (ReleaseSummaryModel release in Model)
+				@foreach (ReleaseDisplayModel release in Model)
 				{
 					<tr>
 						<td>

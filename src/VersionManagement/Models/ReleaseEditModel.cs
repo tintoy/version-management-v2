@@ -8,9 +8,9 @@ namespace DD.Cloud.VersionManagement.Models
     using DataAccess.Models;
 
     /// <summary>
-    ///		Summary view model for a release.
+    ///		Create / edit view model for a release.
     /// </summary>
-    public class ReleaseModel
+    public class ReleaseEditModel
     {
 		/// <summary>
 		///		The release Id.
@@ -41,7 +41,7 @@ namespace DD.Cloud.VersionManagement.Models
 		public string SpecialVersion { get; set; }
 
 		/// <summary>
-		///		Convert the <see cref="ReleaseModel"/> to a new <see cref="ReleaseData"/>.
+		///		Convert the <see cref="ReleaseEditModel"/> to a new <see cref="ReleaseData"/>.
 		/// </summary>
 		/// <returns>
 		///		The new <see cref="ReleaseData"/>.
@@ -65,7 +65,7 @@ namespace DD.Cloud.VersionManagement.Models
 		}
 
 		/// <summary>
-		///		Update existing <see cref="ReleaseData"/> from the <see cref="ReleaseModel"/>.
+		///		Update existing <see cref="ReleaseData"/> from the <see cref="ReleaseEditModel"/>.
 		/// </summary>
 		/// <param name="releaseData">
 		///		The <see cref="ReleaseData"/> to update.
@@ -91,20 +91,20 @@ namespace DD.Cloud.VersionManagement.Models
 		}
 
 		/// <summary>
-		///		Create a new <see cref="ReleaseModel"/> from the specified <see cref="ReleaseData"/>.
+		///		Create a new <see cref="ReleaseEditModel"/> from the specified <see cref="ReleaseData"/>.
 		/// </summary>
 		/// <param name="releaseData">
 		///		The release persistence model.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="ReleaseModel"/>, or <c>null</c> if the <see cref="ReleaseData"/> is <c>null</c>.
+		///		The new <see cref="ReleaseEditModel"/>, or <c>null</c> if the <see cref="ReleaseData"/> is <c>null</c>.
 		/// </returns>
-		public static ReleaseModel FromData(ReleaseData releaseData)
+		public static ReleaseEditModel FromData(ReleaseData releaseData)
 		{
 			if (releaseData == null)
 				return null;
 
-			return new ReleaseModel
+			return new ReleaseEditModel
 			{
 				Id = releaseData.Id,
 				Name = releaseData.Name,
@@ -115,15 +115,15 @@ namespace DD.Cloud.VersionManagement.Models
 		}
 		
 		/// <summary>
-		///		Create a sequence of <see cref="ReleaseModel"/>s from the specified <see cref="ReleaseData"/>s.
+		///		Create a sequence of <see cref="ReleaseEditModel"/>s from the specified <see cref="ReleaseData"/>s.
 		/// </summary>
 		/// <param name="releaseData">
 		///		The release persistence models.
 		/// </param>
 		/// <returns>
-		///		A sequence of <see cref="ReleaseModel"/>s.
+		///		A sequence of <see cref="ReleaseEditModel"/>s.
 		/// </returns>
-		public static IEnumerable<ReleaseModel> FromData(IEnumerable<ReleaseData> releaseData)
+		public static IEnumerable<ReleaseEditModel> FromData(IEnumerable<ReleaseData> releaseData)
 		{
 			if (releaseData == null)
 				throw new ArgumentNullException(nameof(releaseData));

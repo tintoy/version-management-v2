@@ -7,11 +7,11 @@ namespace DD.Cloud.VersionManagement.Models
 	using DataAccess.Models;
 
 	/// <summary>
-	///		Index view model for a release.
+	///		Display model for a release.
 	/// </summary>
 	///
-    public class ReleaseSummaryModel
-		: ReleaseModel
+    public class ReleaseDisplayModel
+		: ReleaseEditModel
     {
 		/// <summary>
 		///		The name of the release's associated product.
@@ -24,15 +24,15 @@ namespace DD.Cloud.VersionManagement.Models
 		public string VersionRangeName { get; set; }
 
 		/// <summary>
-		///		Create a new <see cref="ReleaseSummaryModel"/> from the specified <see cref="ReleaseData"/>.
+		///		Create a new <see cref="ReleaseDisplayModel"/> from the specified <see cref="ReleaseData"/>.
 		/// </summary>
 		/// <param name="releaseData">
 		///		The release persistence model.
 		/// </param>
 		/// <returns>
-		///		The new <see cref="ReleaseSummaryModel"/>, or <c>null</c> if the <see cref="ReleaseData"/> is <c>null</c>.
+		///		The new <see cref="ReleaseDisplayModel"/>, or <c>null</c> if the <see cref="ReleaseData"/> is <c>null</c>.
 		/// </returns>
-		public static new ReleaseSummaryModel FromData(ReleaseData releaseData)
+		public static new ReleaseDisplayModel FromData(ReleaseData releaseData)
 		{
 			if (releaseData == null)
 				return null;
@@ -43,7 +43,7 @@ namespace DD.Cloud.VersionManagement.Models
 			if (releaseData.VersionRange == null)
 				throw new ArgumentException("Release was not loaded with its related version range.", nameof(releaseData));
 
-			return new ReleaseSummaryModel
+			return new ReleaseDisplayModel
 			{
 				Id = releaseData.Id,
 				Name = releaseData.Name,
@@ -56,15 +56,15 @@ namespace DD.Cloud.VersionManagement.Models
 		}
 		
 		/// <summary>
-		///		Create a sequence of <see cref="ReleaseSummaryModel"/>s from the specified <see cref="ReleaseSummaryData"/>.
+		///		Create a sequence of <see cref="ReleaseDisplayModel"/>s from the specified <see cref="ReleaseSummaryData"/>.
 		/// </summary>
 		/// <param name="releaseData">
 		///		The product persistence models.
 		/// </param>
 		/// <returns>
-		///		A sequence of <see cref="ReleaseSummaryModel"/>.
+		///		A sequence of <see cref="ReleaseDisplayModel"/>.
 		/// </returns>
-		public static new IEnumerable<ReleaseSummaryModel> FromData(IEnumerable<ReleaseData> releaseData)
+		public static new IEnumerable<ReleaseDisplayModel> FromData(IEnumerable<ReleaseData> releaseData)
 		{
 			if (releaseData == null)
 				throw new ArgumentNullException(nameof(releaseData));
