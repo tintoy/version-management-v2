@@ -161,41 +161,27 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			ProductData existingProduct = _entities.Products.FirstOrDefault(
-				product => product.Id == model.ProductId
-			);
-			if (existingProduct == null)
-			{
-				ModelState.AddModelError("ProductId",
-					$"No product was found with Id '{model.ProductId}'."
-				);
+            try
+            {
+                _data.CreateRelease(model);
+            }
+            catch (EntityNotFoundException entityNotFound) when (entityNotFound.EntityType == "Product")
+            {
+                ModelState.AddModelError(nameof(model.ProductId),
+                    entityNotFound.Message
+                );
+
+                return View(model);
+            }
+            catch (EntityAlreadyExistsException entityAlreadyExits) when (entityAlreadyExits.EntityType == "Release")
+            {
+                ModelState.AddModelError(nameof(model.Name),
+                    entityAlreadyExits.Message
+                );
 
 				return View(model);
-			}
-
-			ReleaseData existingReleaseByName = _entities.Releases.FirstOrDefault(
-				release => release.Name == model.Name && release.ProductId == model.ProductId
-			);
-			if (existingReleaseByName != null)
-			{
-				ModelState.AddModelError("Name",
-					$"There is already a release named '{model.Name}' for product '{existingProduct.Name}'."
-				);
-
-				return View(model);
-			}
-
-			Log.LogInformation("Create release '{ReleaseName}' for product {ProductId} ('{ProductName}').",
-				model.Name,
-				model.ProductId,
-				existingProduct.Name
-			);
-
-			_entities.Releases.Add(
-				model.ToData()
-			);
-			_entities.SaveChanges();
-
+            }
+			
 			return RedirectToAction("Index");
 		}
 

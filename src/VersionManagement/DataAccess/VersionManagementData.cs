@@ -102,15 +102,13 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		/// <returns>
 		///     A <see cref="ProductModel"/> representing the new product.
 		/// </returns>
-		public ProductModel CreateProduct(string productName)
+		public ProductModel CreateProduct(ProductModel model)
 		{
-			if (String.IsNullOrWhiteSpace(productName))
-				throw new ArgumentException("Product name cannot be null, empty, or entirely composed of whitespace.", nameof(productName));
+			if (model == null)
+				throw new ArgumentNullException(nameof(model)); 
 				
-			ProductData productData = new ProductData
-			{
-				Name = productName
-			};
+			ProductData productData = model.ToData();
+			
 			_entityContext.Products.Add(productData);
 			_entityContext.SaveChanges();
 			
@@ -235,6 +233,43 @@ namespace DD.Cloud.VersionManagement.DataAccess
 					.FirstOrDefault(release => release.Id == releaseId);
 					
 			return ReleaseDisplayModel.FromData(releaseById);
+		}
+		
+		/// <summary>
+		/// 	Create a new release.
+		/// </summary>
+		/// <param name="model">
+		///		A <see cref="ReleaseEditModel"/> representing the release to create.
+		/// </param>
+		/// <returns>
+		///		A <see cref="ReleaseDisplayModel"/> representing the new release.
+		/// </returns>
+		public ReleaseDisplayModel CreateRelease(ReleaseEditModel model)
+		{
+			if (model == null)
+				throw new ArgumentNullException(nameof(model));
+				
+			if (!model.ProductId.HasValue)
+				throw new ArgumentException("Release is missing associated product Id.", nameof(model));
+				
+			ProductModel product = GetProductById(model.ProductId.Value);
+			if (product == null)
+				throw EntityNotFoundException.Product(model.ProductId.Value);
+				
+			ReleaseData existingReleaseByName = _entityContext.Releases.FirstOrDefault(
+				release => release.Name == model.Name && release.ProductId == model.ProductId
+			);
+			if (existingReleaseByName != null)
+				throw EntityAlreadyExistsException.ReleaseWithName(model.Name, product.Name);
+
+			ReleaseData newRelease = model.ToData();
+			
+			_entityContext.Releases.Add(
+				model.ToData()
+			);
+			_entityContext.SaveChanges();
+			
+			return GetReleaseById(newRelease.Id);
 		}
 		
 		#endregion // Releases

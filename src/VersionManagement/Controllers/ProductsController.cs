@@ -100,6 +100,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
+            // TODO: Refactor (move duplicate name check into IVersionManagementData.CreateProduct).
 			ProductModel existingProductByName = _data.GetProductByName(model.Name);
 			if (existingProductByName != null)
 			{
@@ -110,7 +111,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				return View(model);
 			}
 
-			ProductModel newProduct = _data.CreateProduct(model.Name);
+			ProductModel newProduct = _data.CreateProduct(model);
 			
 			Log.LogInformation("Created new product '{ProductName}' (Id = {ProductId}).",
 				newProduct.Name,

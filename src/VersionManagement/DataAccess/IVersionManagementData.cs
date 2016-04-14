@@ -45,7 +45,7 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		/// <returns>
 		///     A <see cref="ProductModel"/> representing the new product.
 		/// </returns>
-		ProductModel CreateProduct(string productName);
+		ProductModel CreateProduct(ProductModel model);
 		
 		/// <summary>
 		/// 	Update the specified product.
@@ -102,6 +102,17 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		A <see cref="ReleaseDisplayModel"/> representing the release, or <c>null<c> if no release was found with the specified Id.
 		/// </returns>
 		ReleaseDisplayModel GetReleaseById(int releaseId);
+        
+        /// <summary>
+		/// 	Create a new release.
+		/// </summary>
+		/// <param name="model">
+		///		A <see cref="ReleaseEditModel"/> representing the release to create.
+		/// </param>
+		/// <returns>
+		///		A <see cref="ReleaseDisplayModel"/> representing the new release.
+		/// </returns>
+		ReleaseDisplayModel CreateRelease(ReleaseEditModel model);
         
 		#endregion // Releases
 		
