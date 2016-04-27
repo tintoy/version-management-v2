@@ -22,4 +22,4 @@ test_script:
     .\run-tests.ps1 -Verbose
 
 deploy_script:
-- cmd: dnu pack .\src\HTTPlease.Core --quiet
+- cmd: dnu pack .\src\VersionManagement --quiet
