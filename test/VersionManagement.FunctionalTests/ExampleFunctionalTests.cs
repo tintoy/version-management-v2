@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -25,7 +22,7 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		public ExampleFunctionalTests()
 		{
 			// Override the application base path so that views are correctly resolved.
-			TestStartup.AppBasePath = @"..\..\src\VersionManagement";
+			TestStartup.AppBasePath = "../../src/VersionManagement";
 		}
 		
 		/// <summary>
