@@ -4,6 +4,8 @@ using System.Runtime.Versioning;
 
 namespace DD.Cloud.VersionManagement.FunctionalTests.Utilities
 {
+	using Microsoft.Extensions.DependencyInjection;
+
 	/// <summary>
 	///		An <see cref="IApplicationEnvironment"/> shim for use in tests.
 	/// </summary>
@@ -41,7 +43,10 @@ namespace DD.Cloud.VersionManagement.FunctionalTests.Utilities
 			ApplicationBasePath = basePath;
 		}
 
-		IApplicationEnvironment OriginalEnvironment { get; }
+		/// <summary>
+		///		The original <see cref="IApplicationEnvironment">environment</see> being wrapped by the <see cref="TestApplicationEnvironment"/>.
+		/// </summary>
+		public IApplicationEnvironment OriginalEnvironment { get; }
 
 		/// <summary>
 		///		The current application name.

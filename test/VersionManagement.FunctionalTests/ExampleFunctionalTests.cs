@@ -9,8 +9,6 @@ using Xunit;
 
 namespace DD.Cloud.VersionManagement.FunctionalTests
 {
-	using Utilities;
-
 	/// <summary>
 	///		Some example functional tests.
 	/// </summary>
@@ -19,23 +17,16 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		/// <summary>
 		///     The application pipeline builder for end-to-end tests.
 		/// </summary>
-		readonly WebHostBuilder TestAppBuilder =
-			TestServer
-				.CreateBuilder()
-				.UseServices(services =>
-				{
-					// Slightly ugly hack.
-					IApplicationEnvironment originalEnvironment = CallContextServiceLocator.Locator.ServiceProvider.GetRequiredService<IApplicationEnvironment>();
+		readonly WebHostBuilder TestAppBuilder = TestServer.CreateBuilder().UseStartup<TestStartup>();
 
-					// Shim the application environment so we point to the correct base path.
-					services.AddInstance(typeof(IApplicationEnvironment),
-						new TestApplicationEnvironment(originalEnvironment,
-							applicationName: "VersionManagement",
-							basePath: Path.GetFullPath(@"..\..\src\VersionManagement")
-						)
-					);
-				})
-				.UseStartup<Startup>();
+		/// <summary>
+		///		Create a new <see cref="ExampleFunctionalTests"/>.
+		/// </summary>
+		public ExampleFunctionalTests()
+		{
+			// Override the application base path so that views are correctly resolved.
+			TestStartup.AppBasePath = @"..\..\src\VersionManagement";
+		}
 		
 		/// <summary>
 		///		Verify that the home page can be retrieved.
@@ -47,9 +38,8 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		public async Task Can_Get_Home_Page()
 		{
 			using (TestServer testServer = new TestServer(TestAppBuilder))
-			using (HttpClient testClient = testServer.CreateClient())
 			{
-				using (HttpResponseMessage response = await testClient.GetAsync("/"))
+				using (HttpResponseMessage response = await testServer.CreateRequest("/").GetAsync())
 				{
 					response.EnsureSuccessStatusCode();
 					
@@ -70,9 +60,8 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		public async Task Can_Get_Products_Page()
 		{
 			using (TestServer testServer = new TestServer(TestAppBuilder))
-			using (HttpClient testClient = testServer.CreateClient())
 			{
-				using (HttpResponseMessage response = await testClient.GetAsync("/products"))
+				using (HttpResponseMessage response = await testServer.CreateRequest("/products").GetAsync())
 				{
 					response.EnsureSuccessStatusCode();
 

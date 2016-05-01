@@ -1,8 +1,11 @@
 using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.FileProviders;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Mvc.Razor;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Linq;
@@ -11,6 +14,7 @@ namespace DD.Cloud.VersionManagement
 {
 	using DataAccess;
 	using DataAccess.Models;
+	using Microsoft.Extensions.OptionsModel;
 
 	/// <summary>
 	///    Configuration logic for the version-management application.
@@ -42,6 +46,10 @@ namespace DD.Cloud.VersionManagement
 			services.AddScoped<IVersionManagementData, VersionManagementData>();
 
 			services.AddMvc()
+				.AddRazorOptions(razor =>
+				{
+					
+				})
 				.AddJsonOptions(json =>
 				{
 					json.SerializerSettings.Converters.Add(
@@ -64,6 +72,9 @@ namespace DD.Cloud.VersionManagement
 			if (app == null)
 				throw new ArgumentNullException(nameof(app));
 
+			if (loggerFactory == null)
+				throw new ArgumentNullException(nameof(loggerFactory));
+			
 			loggerFactory.AddConsole(LogLevel.Warning);
 			
 			app.UseDeveloperExceptionPage();
@@ -162,7 +173,7 @@ namespace DD.Cloud.VersionManagement
 		/// <summary>
 		/// 	The main program entry point.
 		/// </summary>
-		/// <param name="args)">
+		/// <param name="args">
 		///		Command-line arguments.
 		/// </param>
 		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
