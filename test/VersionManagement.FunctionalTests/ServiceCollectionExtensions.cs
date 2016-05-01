@@ -38,14 +38,20 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 
 			if (String.IsNullOrWhiteSpace(applicationBasePath))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'applicationBasePath'.", nameof(applicationBasePath));
-
-			applicationBasePath = Path.GetFullPath(applicationBasePath);
-
+			
 			// Slightly ugly hack.
 			IApplicationEnvironment originalEnvironment = CallContextServiceLocator.Locator.ServiceProvider.GetRequiredService<IApplicationEnvironment>();
-			IApplicationEnvironment shimApplicationEnvironment = new TestApplicationEnvironment(originalEnvironment, applicationName, applicationBasePath);
+
+			// If required, make the path relative to the original application base path.
+			if (!Path.IsPathRooted(applicationBasePath))
+			{
+				applicationBasePath = Path.GetFullPath(
+					Path.Combine(originalEnvironment.ApplicationBasePath, applicationBasePath)
+				);
+			}
 
 			// Add a shim for the application environment so we point to the correct base path.
+			IApplicationEnvironment shimApplicationEnvironment = new TestApplicationEnvironment(originalEnvironment, applicationName, applicationBasePath);
 			services.Replace(new ServiceDescriptor(
 				serviceType: typeof(IApplicationEnvironment),
 				instance: shimApplicationEnvironment
