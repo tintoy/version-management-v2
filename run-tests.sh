@@ -16,9 +16,9 @@ for testProject in $testProjects; do
 done
 
 functionalTestProjects=`ls -d1 ./test/*.FunctionalTests`
-for testProject in $testProjects; do
+for testProject in $functionalTestProjects; do
 	echo "Running functional tests for project \"$testProject\"."
-	dnx --appbase "./src/VersionManagement" -p "$testProject" test -verbose
+	dnx -p "$testProject" test -verbose
 	EXITCODE=$?
 	
 	if [ $EXITCODE != 0 ]; then
