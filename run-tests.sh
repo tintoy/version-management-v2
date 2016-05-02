@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: Run all tests before deciding to return zero / non-zero exit code. 
+
 testProjects=`ls -d1 ./test/*.Tests`
 for testProject in $testProjects; do
 	echo "Running unit tests for project \"$testProject\"."
