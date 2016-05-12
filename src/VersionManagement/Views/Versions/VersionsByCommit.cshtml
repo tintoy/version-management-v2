@@ -1,0 +1,39 @@
+@using DD.Cloud.VersionManagement.DataAccess.Models
+@model IEnumerable<ReleaseVersionData>
+
+@{
+	if (ViewBag.ProductName != null)
+		ViewBag.Title = $"Versions allocated for '{ViewBag.CommitId}' ('{ViewBag.ProductName}').";
+	else
+		ViewBag.Title = $"Versions allocated for '{ViewBag.CommitId}'";
+}
+
+<div class="row">
+	<div class="col-md-8">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Release</th>
+					<th>Version</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (ReleaseVersionData releaseVersion in Model)
+				{
+					<tr>
+						<td>
+							<a asp-controller="Products" asp-action="DetailById" asp-route-productId="@releaseVersion.Release.ProductId">@releaseVersion.Release.Product.Name</a>
+						</td>
+						<td>
+							<a asp-controller="Releases" asp-action="DetailById" asp-route-releaseId="@releaseVersion.Release.Id">@releaseVersion.Release.Name</a>
+						</td>
+						<td>
+							@releaseVersion.ToSemanticVersion()
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
