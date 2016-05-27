@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -201,7 +200,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				release => release.Id == releaseId
 			);
 			if (releaseData == null)
-				return HttpNotFound($"No release was found with Id {releaseId}");
+				return NotFound($"No release was found with Id {releaseId}");
 
 			ViewBag.Products = SelectLists.Products(_entities, releaseData.ProductId);
 			ViewBag.VersionRanges = SelectLists.VersionRanges(_entities, releaseData.VersionRangeId);
@@ -241,7 +240,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				release => release.Id == model.Id
 			);
 			if (releaseData == null)
-				return HttpNotFound($"No release was found with Id {model.Id}");
+				return NotFound($"No release was found with Id {model.Id}");
 
 			model.ToData(releaseData);
 			_entities.SaveChanges();

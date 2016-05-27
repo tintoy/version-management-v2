@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -66,7 +66,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		{
 			ProductModel productById = _data.GetProductById(productId);
 			if (productById == null)
-				return HttpNotFound($"No product found with Id {productId}.");
+				return NotFound($"No product found with Id {productId}.");
 
 			return View("Detail", productById);
 		}
@@ -135,7 +135,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 		{
 			ProductModel product = _data.GetProductById(productId);
 			if (product == null)
-				return HttpNotFound($"No product was found with Id {productId}");
+				return NotFound($"No product was found with Id {productId}");
 
 			return View(product);
 		}
@@ -165,7 +165,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 
 			ProductModel updatedProduct = _data.UpdateProduct(model);
 			if (updatedProduct == null)
-				return HttpNotFound($"No product was found with Id {model.Id}");
+				return NotFound($"No product was found with Id {model.Id}");
 
 			return RedirectToAction("Index");
 		}

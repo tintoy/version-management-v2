@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.AspNet.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Linq;
 
@@ -104,8 +104,11 @@ namespace DD.Cloud.VersionManagement.TagHelpers
 					classes += " active";
 				else
 					classes = "active";
-
-				classAttribute.Value = classes;
+					
+				output.Attributes.Remove(classAttribute);
+				output.Attributes.Add(
+					new TagHelperAttribute(classAttribute.Name, classes, classAttribute.Minimized)
+				);
 			}
 			else
 			{

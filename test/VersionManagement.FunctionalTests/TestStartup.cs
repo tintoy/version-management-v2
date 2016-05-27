@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Mvc.Razor;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.Extensions.PlatformAbstractions;
 using System;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
+using System.IO;
 
 namespace DD.Cloud.VersionManagement.FunctionalTests
 {
@@ -44,8 +45,6 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 			if (services == null)
 				throw new ArgumentNullException(nameof(services));
 
-			services.OverrideApplicationEnvironment("VersionManagement", AppBasePath);
-
 			_appStartup.ConfigureServices(services);
 		}
 
@@ -64,7 +63,7 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		/// <param name="razorOptions">
 		///		The view options for the Razor view engine.
 		/// </param>
-		public void Configure(IApplicationBuilder app, IApplicationEnvironment environment, ILoggerFactory loggerFactory, IOptions<RazorViewEngineOptions> razorOptions)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment environment, ILoggerFactory loggerFactory, IOptions<RazorViewEngineOptions> razorOptions)
 		{
 			if (app == null)
 				throw new ArgumentNullException(nameof(app));
@@ -72,8 +71,12 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 			if (razorOptions == null)
 				throw new ArgumentNullException(nameof(razorOptions));
 
+			string appBasePath = Path.GetFullPath(AppBasePath);
+
 			// Ensure Razor uses overridden base path.
-			razorOptions.Value.FileProvider = new PhysicalFileProvider(environment.ApplicationBasePath);
+			razorOptions.Value.FileProviders.Add(
+				new PhysicalFileProvider(appBasePath)
+			);
 
 			_appStartup.Configure(app, loggerFactory);
 		}

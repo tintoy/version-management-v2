@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace DD.Cloud.VersionManagement.Controllers.Api

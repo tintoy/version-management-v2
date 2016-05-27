@@ -1,25 +1,22 @@
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc.Razor;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Converters;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement
 {
-	using DataAccess;
-	using DataAccess.Models;
-	using Microsoft.Extensions.OptionsModel;
+    using DataAccess;
+    using DataAccess.Models;
 
-	/// <summary>
-	///    Configuration logic for the version-management application.
-	/// </summary>
-	public sealed class Startup
+    /// <summary>
+    ///    Configuration logic for the version-management application.
+    /// </summary>
+    public sealed class Startup
 	{
 		/// <summary>
 		///   Configure / register components and services.
@@ -34,14 +31,10 @@ namespace DD.Cloud.VersionManagement
 				
 			services.AddLogging();
 
-			services.AddEntityFramework()
-				.AddSqlite()
-				.AddDbContext<VersionManagementEntities>(options =>
-				{
-					options.UseSqlite(
-						connectionString: "Data Source=../VersionManagement2.db"
-					);
-				});
+			services.AddDbContext<VersionManagementEntities>(options =>
+			{
+				options.UseSqlite("Data Source=../VersionManagement2.db");
+			});
 
 			services.AddScoped<IVersionManagementData, VersionManagementData>();
 
@@ -176,6 +169,17 @@ namespace DD.Cloud.VersionManagement
 		/// <param name="args">
 		///		Command-line arguments.
 		/// </param>
-		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+		public static void Main(string[] args)
+		{
+			var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(
+					Directory.GetCurrentDirectory()
+				)
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+		}
 	}
 }

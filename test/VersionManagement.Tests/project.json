@@ -1,9 +1,9 @@
 ﻿{
-    "version": "1.0.0-alpha1",
+    "version": "1.0.0-alpha2",
     "description": "Tests for DD Cloud version-management",
     "authors": [ "tintoy" ],
 
-    "compilationOptions": {
+    "buildOptions": {
         "emitEntryPoint": false
     },
     "tooling": {
@@ -11,17 +11,25 @@
     },
 
     "frameworks": {
-        "dnxcore50": { }
-    },
+		"netcoreapp1.0": { 
+            "imports": [
+				"dotnet5.6",
+				"dnxcore50",
+				"portable-net45+win8"
+			]
+        }
+	},
 
     "dependencies": {
-        "EntityFramework.InMemory": "7.0.0-rc1-final",
-        "VersionManagement": "1.0.0-alpha1",
-        "xunit": "2.1.0",
-        "xunit.runner.dnx": "2.1.0-rc1-build204"
+        "Microsoft.NETCore.App": {
+			"version": "1.0.0-rc2-3002702",
+			"type": "platform"
+		},
+        "Microsoft.EntityFrameworkCore.InMemory": "1.0.0-rc2-final",
+        "VersionManagement": "1.0.0-alpha2",
+        "xunit": "2.1.0-*",
+        "dotnet-test-xunit": "1.0.0-*"
     },
-
-    "commands": {
-        "test": "xunit.runner.dnx"
-    }
+    
+    "testRunner": "xunit"
 }

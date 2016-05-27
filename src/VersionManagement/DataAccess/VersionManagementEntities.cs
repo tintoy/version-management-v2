@@ -1,5 +1,5 @@
 using System;
-using Microsoft.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DD.Cloud.VersionManagement.DataAccess
 {
@@ -15,6 +15,17 @@ namespace DD.Cloud.VersionManagement.DataAccess
 		///		Create a new version-management entity context.
 		/// </summary>
 		public VersionManagementEntities()
+		{
+		}
+		
+		/// <summary>
+		///		Create a new version-management entity context using the specified options.
+		/// </summary>
+		/// <param name="options">
+		///		Create a new version-management entity context.
+		/// </param>
+		public VersionManagementEntities(DbContextOptions<VersionManagementEntities> options)
+			: base(options)
 		{
 		}
 

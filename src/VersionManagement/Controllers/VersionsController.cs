@@ -1,8 +1,7 @@
-using Microsoft.AspNet.Mvc;
-using Microsoft.Data.Entity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DD.Cloud.VersionManagement.Controllers
@@ -71,7 +70,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 					"Must supply a valid commit Id."
 				);
 				
-				return HttpBadRequest(ModelState);
+				return BadRequest(ModelState);
 			}
 			
 			ViewBag.CommitId = commitId;
@@ -90,7 +89,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 						$"No product was found with Id '{productId.Value}'."
 					);
 					
-					return HttpBadRequest(ModelState);
+					return BadRequest(ModelState);
 				}
 				
 				ViewBag.ProductName = product.Name;

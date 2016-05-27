@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -76,7 +76,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				versionRange => versionRange.Id == versionRangeId
 			);
 			if (versionRangeById == null)
-				return HttpNotFound($"No product found with Id {versionRangeId}.");
+				return NotFound($"No product found with Id {versionRangeId}.");
 
 			return View("Detail",
 				VersionRangeModel.FromData(versionRangeById)
@@ -99,7 +99,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				versionRange => versionRange.Id == versionRangeId
 			);
 			if (versionRangeData == null)
-				return HttpNotFound($"No version range was found with Id {versionRangeId}");
+				return NotFound($"No version range was found with Id {versionRangeId}");
 
 			ViewBag.VersionComponents = SelectLists.VersionComponents(versionRangeData.IncrementBy);
 
@@ -159,7 +159,7 @@ namespace DD.Cloud.VersionManagement.Controllers
 				versionRange => versionRange.Id == model.Id
 			);
 			if (versionRangeData == null)
-				return HttpNotFound($"No version range was found with Id {model.Id}");
+				return NotFound($"No version range was found with Id {model.Id}");
 
 			model.ToData(versionRangeData);
 			_entities.SaveChanges();

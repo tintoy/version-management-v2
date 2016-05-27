@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Threading.Tasks;
 
@@ -31,7 +31,7 @@ namespace DD.Cloud.VersionManagement.Models.Binding
 		///		A <c>null</c> return value means that the model binder was not able to handle the request.
 		///		Returning <c>null</c> ensures that subsequent model binders are run.
 		/// </remarks>
-		public Task<ModelBindingResult> BindModelAsync(ModelBindingContext bindingContext)
+		public Task BindModelAsync(ModelBindingContext bindingContext)
 		{
 			if (bindingContext == null)
 				throw new ArgumentNullException(nameof(bindingContext));
@@ -58,10 +58,10 @@ namespace DD.Cloud.VersionManagement.Models.Binding
 			bindingContext.ModelState.AddModelError(bindingContext.ModelName,
 				$"'{modelValue}' is not a valid version number."
 			);
+			
+			bindingContext.Result = ModelBindingResult.Failed(bindingContext.ModelName);
 
-			return Task.FromResult(
-				ModelBindingResult.Failed(bindingContext.ModelName)
-			);
+			return Task.CompletedTask;
 		}
     }
 }

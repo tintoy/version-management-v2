@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Web.Http;
 
 namespace DD.Cloud.VersionManagement.Controllers.Api
@@ -28,13 +28,13 @@ namespace DD.Cloud.VersionManagement.Controllers.Api
 		/// <returns>
 		///		The action result.
 		/// </returns>
-		protected virtual HttpNotFoundObjectResult EntityNotFound<TBody>(TBody body)
+		protected virtual NotFoundObjectResult EntityNotFound<TBody>(TBody body)
 		{
 			Context.Response.Headers["X-ErrorCode"] = "EntityNotFound";
 			
 			// TODO: Add X-EntityType header.
 
-			return new HttpNotFoundObjectResult(body);
+			return new NotFoundObjectResult(body);
 		}
 	}
 }

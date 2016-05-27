@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.TestHost;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,7 +14,7 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		/// <summary>
 		///     The application pipeline builder for end-to-end tests.
 		/// </summary>
-		readonly WebHostBuilder TestAppBuilder = TestServer.CreateBuilder().UseStartup<TestStartup>();
+		readonly IWebHostBuilder TestAppBuilder = new WebHostBuilder().UseStartup<TestStartup>();
 
 		/// <summary>
 		///		Create a new <see cref="ExampleFunctionalTests"/>.
