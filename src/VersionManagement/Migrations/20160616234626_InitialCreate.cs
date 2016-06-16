@@ -1,6 +1,8 @@
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace versionmanagement.Migrations
+namespace VersionManagement.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -11,19 +13,20 @@ namespace versionmanagement.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Autoincrement", true),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                 });
+
             migrationBuilder.CreateTable(
                 name: "VersionRange",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Autoincrement", true),
                     EndVersionBuild = table.Column<int>(nullable: false),
                     EndVersionMajor = table.Column<int>(nullable: false),
                     EndVersionMinor = table.Column<int>(nullable: false),
@@ -43,12 +46,13 @@ namespace versionmanagement.Migrations
                 {
                     table.PrimaryKey("PK_VersionRange", x => x.Id);
                 });
+
             migrationBuilder.CreateTable(
                 name: "Release",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
                     SpecialVersion = table.Column<string>(nullable: true),
@@ -70,12 +74,14 @@ namespace versionmanagement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
             migrationBuilder.CreateTable(
                 name: "ReleaseVersion",
                 columns: table => new
                 {
                     CommitId = table.Column<string>(nullable: false),
                     ReleaseId = table.Column<int>(nullable: false),
+                    FromVersionRangeId = table.Column<int>(nullable: false),
                     SpecialVersion = table.Column<string>(nullable: false),
                     VersionBuild = table.Column<int>(nullable: false),
                     VersionMajor = table.Column<int>(nullable: false),
@@ -86,20 +92,53 @@ namespace versionmanagement.Migrations
                 {
                     table.PrimaryKey("PK_ReleaseVersion", x => new { x.CommitId, x.ReleaseId });
                     table.ForeignKey(
+                        name: "FK_ReleaseVersion_VersionRange_FromVersionRangeId",
+                        column: x => x.FromVersionRangeId,
+                        principalTable: "VersionRange",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_ReleaseVersion_Release_ReleaseId",
                         column: x => x.ReleaseId,
                         principalTable: "Release",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Release_ProductId",
+                table: "Release",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Release_VersionRangeId",
+                table: "Release",
+                column: "VersionRangeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReleaseVersion_FromVersionRangeId",
+                table: "ReleaseVersion",
+                column: "FromVersionRangeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReleaseVersion_ReleaseId",
+                table: "ReleaseVersion",
+                column: "ReleaseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ReleaseVersion");
-            migrationBuilder.DropTable("Release");
-            migrationBuilder.DropTable("Product");
-            migrationBuilder.DropTable("VersionRange");
+            migrationBuilder.DropTable(
+                name: "ReleaseVersion");
+
+            migrationBuilder.DropTable(
+                name: "Release");
+
+            migrationBuilder.DropTable(
+                name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "VersionRange");
         }
     }
 }

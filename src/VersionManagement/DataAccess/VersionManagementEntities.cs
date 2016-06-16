@@ -63,22 +63,14 @@ namespace DD.Cloud.VersionManagement.DataAccess
 			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.Entity<ProductData>()
-				.ToTable("Product");
-			modelBuilder.Entity<ProductData>()
 				.HasKey(product => product.Id);
 
-			modelBuilder.Entity<ReleaseData>()
-				.ToTable("Release");
 			modelBuilder.Entity<ReleaseData>()
 				.HasKey(release => release.Id);
 
 			modelBuilder.Entity<VersionRangeData>()
-				.ToTable("VersionRange");
-			modelBuilder.Entity<VersionRangeData>()
 				.HasKey(versionRange => versionRange.Id);
 
-			modelBuilder.Entity<ReleaseVersionData>()
-				.ToTable("ReleaseVersion");
 			modelBuilder.Entity<ReleaseVersionData>()
 				.HasKey(releaseVersion => new
 				{

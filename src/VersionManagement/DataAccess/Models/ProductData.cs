@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
@@ -9,6 +10,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 	/// <remarks>
 	///		A product is used to group related releases together.
 	/// </remarks>
+    [Table("Product")]
 	public sealed class ProductData
 	{
 		/// <summary>

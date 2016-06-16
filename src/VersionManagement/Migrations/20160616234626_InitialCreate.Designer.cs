@@ -1,20 +1,22 @@
+﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using DD.Cloud.VersionManagement.DataAccess;
 
-namespace versionmanagement.Migrations
+namespace VersionManagement.Migrations
 {
     [DbContext(typeof(VersionManagementEntities))]
-    [Migration("20160401060344_InitialCreate")]
+    [Migration("20160616234626_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
+                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901");
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Product", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ProductData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -23,9 +25,11 @@ namespace versionmanagement.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -40,13 +44,21 @@ namespace versionmanagement.Migrations
                     b.Property<int>("VersionRangeId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("VersionRangeId");
+
+                    b.ToTable("Release");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersion", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersionData", b =>
                 {
                     b.Property<string>("CommitId");
 
                     b.Property<int>("ReleaseId");
+
+                    b.Property<int>("FromVersionRangeId");
 
                     b.Property<string>("SpecialVersion")
                         .IsRequired();
@@ -60,9 +72,15 @@ namespace versionmanagement.Migrations
                     b.Property<int>("VersionRevision");
 
                     b.HasKey("CommitId", "ReleaseId");
+
+                    b.HasIndex("FromVersionRangeId");
+
+                    b.HasIndex("ReleaseId");
+
+                    b.ToTable("ReleaseVersion");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.VersionRange", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.VersionRangeData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -97,24 +115,34 @@ namespace versionmanagement.Migrations
                     b.Property<int>("StartVersionRevision");
 
                     b.HasKey("Id");
+
+                    b.ToTable("VersionRange");
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.Release", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseData", b =>
                 {
-                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Product")
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.ProductData")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.VersionRange")
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.VersionRangeData")
                         .WithMany()
-                        .HasForeignKey("VersionRangeId");
+                        .HasForeignKey("VersionRangeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersion", b =>
+            modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseVersionData", b =>
                 {
-                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.Release")
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.VersionRangeData")
                         .WithMany()
-                        .HasForeignKey("ReleaseId");
+                        .HasForeignKey("FromVersionRangeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DD.Cloud.VersionManagement.DataAccess.Models.ReleaseData")
+                        .WithMany()
+                        .HasForeignKey("ReleaseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

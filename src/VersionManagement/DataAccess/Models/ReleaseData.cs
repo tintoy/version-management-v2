@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
+    [Table("Release")]
 	public class ReleaseData
 	{
 		public ReleaseData()

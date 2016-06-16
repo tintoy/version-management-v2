@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
+    [Table("VersionRange")]
 	public sealed class VersionRangeData
 	{
 		public VersionRangeData()

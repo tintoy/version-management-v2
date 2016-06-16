@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DD.Cloud.VersionManagement.DataAccess.Models
 {
 	/// <summary>
 	/// 	Persistence model for a release version allocated to a specific commit. 
 	/// </summary>
+    [Table("ReleaseVersion")]    
 	public sealed class ReleaseVersionData
     {
 		/// <summary>
@@ -32,6 +34,9 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			if (release == null)
 				throw new ArgumentNullException(nameof(release));
 
+            if (release.VersionRange == null)
+                throw new ArgumentException("Release.VersionRange cannot be null.", nameof(release));
+
 			if (String.IsNullOrWhiteSpace(commitId))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'commitId'.", nameof(commitId));
 
@@ -39,6 +44,8 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 				throw new ArgumentNullException(nameof(version));
 
 			Release = release;
+            FromVersionRange = release.VersionRange;
+            FromVersionRangeId = release.VersionRangeId;
 			ReleaseId = release.Id;
 			CommitId = commitId;
 			VersionMajor = version.Major;
@@ -46,6 +53,7 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 			VersionBuild = version.Build;
 			VersionRevision = version.Revision;
 			SpecialVersion = release.SpecialVersion;
+            
 		}
 
 		/// <summary>
@@ -91,7 +99,20 @@ namespace DD.Cloud.VersionManagement.DataAccess.Models
 		/// <summary>
 		/// 	The release for which the version was allocated.
 		/// </summary>
+        [Required]
 		public ReleaseData Release { get; set; }
+
+        /// <summary>
+		/// 	The version range from which the version was allocated.
+		/// </summary>
+        [Required]
+        public VersionRangeData FromVersionRange { get; set; }
+
+        /// <summary>
+		/// 	The Id of the version range from which the version was allocated.
+		/// </summary>
+        [Required]
+		public int FromVersionRangeId { get; set; }
 
 		/// <summary>
 		/// 	Convert the release version information to a semantic version (e.g. "1.0.0-alpha1").

@@ -16,7 +16,7 @@ build_script:
 
     dnu restore --quiet
 
-    .\build-all.ps1 -Verbose
+    .\build-all.ps1
 artifacts:
 - path: src\artifacts\packages\Debug\*.nupkg
 test_script:
