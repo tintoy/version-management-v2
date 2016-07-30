@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.0-alpha2",
+    "version": "1.0.0-*",
     "description": "Tests for DD Cloud version-management",
     "authors": [ "tintoy" ],
 
@@ -26,7 +26,7 @@
 			"type": "platform"
 		},
         "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
-        "VersionManagement": "1.0.0-alpha2",
+        "VersionManagement": "1.0.0-*",
         "xunit": "2.1.0-*",
         "dotnet-test-xunit": "1.0.0-*"
     },
