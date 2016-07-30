@@ -13,10 +13,15 @@ build_script:
     $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
     dotnet build --version-suffix $buildVersion "src/VersionManagement*" "test/VersionManagement*"
-artifacts:
-- path: src\artifacts\packages\Debug\*.nupkg
+
+test_script:
 - ps: >-
-    dotnet test $buildVersion "test/HTTPlease*"
+    Get-Item -Directory test/VersionManagement* | % { dotnet test $_ }
 
 deploy_script:
-- cmd: dotnet pack --version-suffix $buildVersion "src/VersionManagement"
+- ps: >-
+    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    Get-Item -Directory src/VersionManagement* | % { dotnet pack --version-suffix $buildVersion $_ }
+
+artifacts:
+- path: src\artifacts\packages\Debug\*.nupkg
