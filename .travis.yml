@@ -38,10 +38,11 @@ matrix:
       env:
         - HTTPLEASE_BUILD_VERSION="beta1"
         - DOTNET_SDK_URL=https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
-      install:
+      before_install:
         - brew update
         - brew install openssl
         - brew link --force openssl
+      install:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
         - echo "$DOTNET_INSTALL_DIR"
         - mkdir -p "$DOTNET_INSTALL_DIR"

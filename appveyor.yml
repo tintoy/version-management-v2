@@ -12,16 +12,16 @@ build_script:
 
     $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
     
-    dotnet build --version-suffix $buildVersion "src/VersionManagement*" "test/VersionManagement*"
+    Dir src/VersionManagement*,test/VersionManagement* -Directory | % { dotnet build --version-suffix $buildVersion $_ }
 
 test_script:
 - ps: >-
-    Get-Item -Directory test/VersionManagement* | % { dotnet test $_ }
+    Dir test/VersionManagement* -Directory | % { dotnet test $_ }
 
 deploy_script:
 - ps: >-
     $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
-    Get-Item -Directory src/VersionManagement* | % { dotnet pack --version-suffix $buildVersion $_ }
+    Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
 
 artifacts:
 - path: src\artifacts\packages\Debug\*.nupkg
