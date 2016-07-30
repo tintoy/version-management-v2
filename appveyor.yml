@@ -21,6 +21,7 @@ test_script:
 deploy_script:
 - ps: >-
     $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    
     Dir src/VersionManagement* -Directory | % { dotnet pack --version-suffix $buildVersion $_ }
 
 artifacts:
