@@ -19,4 +19,4 @@ artifacts:
     dotnet test $buildVersion "test/HTTPlease*"
 
 deploy_script:
-- cmd: dotnet pack --version-suffix $buildVersion "src/VersionManagement*"
+- cmd: dotnet pack --version-suffix $buildVersion "src/VersionManagement"

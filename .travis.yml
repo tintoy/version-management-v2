@@ -54,9 +54,11 @@ script:
   - dotnet restore
   - echo -en 'travis_fold:end:dotnet_restore'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_build'
-  - dotnet build "src/VersionManagement" "test/VersionManagement.*Tests"
+  - dotnet build "src/VersionManagement*" "test/VersionManagement.*Tests"
   - echo -en 'travis_fold:end:dotnet_build'
   - echo 'dotnet test' && echo -en 'travis_fold:start:dotnet_test'
   - dotnet test "test/VersionManagement.*Tests"
   - echo -en 'travis_fold:end:dotnet_test'
-  - dotnet pack "src/VersionManagement*"
+  - echo 'dotnet pack' && echo -en 'travis_fold:start:dotnet_pack'
+  - dotnet pack "src/VersionManagement"
+  - echo -en 'travis_fold:end:dotnet_pack'
