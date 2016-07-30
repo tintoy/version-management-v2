@@ -22,7 +22,7 @@ namespace DD.Cloud.VersionManagement.FunctionalTests
 		public ExampleFunctionalTests()
 		{
 			// Override the application base path so that views are correctly resolved.
-			TestStartup.AppBasePath = "../../src/VersionManagement";
+			TestStartup.AppBasePath = "src/VersionManagement";
 		}
 		
 		/// <summary>

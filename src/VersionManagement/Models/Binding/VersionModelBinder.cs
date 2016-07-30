@@ -43,7 +43,7 @@ namespace DD.Cloud.VersionManagement.Models.Binding
 			if (String.IsNullOrWhiteSpace(modelValue))
 			{
 				return Task.FromResult(
-					ModelBindingResult.Success(bindingContext.ModelName, null)
+					ModelBindingResult.Success(null)
 				);
 			}
 
@@ -51,7 +51,7 @@ namespace DD.Cloud.VersionManagement.Models.Binding
 			if (Version.TryParse(modelValue, out version))
 			{
 				return Task.FromResult(
-					ModelBindingResult.Success(bindingContext.ModelName, version)
+					ModelBindingResult.Success(version)
 				);
 			}
 
@@ -59,7 +59,7 @@ namespace DD.Cloud.VersionManagement.Models.Binding
 				$"'{modelValue}' is not a valid version number."
 			);
 			
-			bindingContext.Result = ModelBindingResult.Failed(bindingContext.ModelName);
+			bindingContext.Result = ModelBindingResult.Failed();
 
 			return Task.CompletedTask;
 		}

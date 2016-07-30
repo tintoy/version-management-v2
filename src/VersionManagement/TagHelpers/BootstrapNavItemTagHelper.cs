@@ -107,7 +107,7 @@ namespace DD.Cloud.VersionManagement.TagHelpers
 					
 				output.Attributes.Remove(classAttribute);
 				output.Attributes.Add(
-					new TagHelperAttribute(classAttribute.Name, classes, classAttribute.Minimized)
+					new TagHelperAttribute(classAttribute.Name, classes)
 				);
 			}
 			else

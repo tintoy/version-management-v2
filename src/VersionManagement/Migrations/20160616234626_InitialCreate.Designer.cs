@@ -14,7 +14,7 @@ namespace VersionManagement.Migrations
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rc2-20901");
+                .HasAnnotation("ProductVersion", "1.0.0");
 
             modelBuilder.Entity("DD.Cloud.VersionManagement.DataAccess.Models.ProductData", b =>
                 {
