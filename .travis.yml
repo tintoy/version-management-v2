@@ -1,22 +1,62 @@
-language: csharp
-mono:
-  - beta
-sudo: required
-dist: trusty
-addons:
-  apt:
-    packages:
-    - libunwind8
-install:
-  - uname -a
-  - curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | sh
-  - source ~/.dnx/dnvm/dnvm.sh
-  - dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64
-script:
-  - dnu restore
-  - ./build-all.sh
-  - ./run-tests.sh
 branches:
   only:
     - development/r1.0
     - release/r1.0
+
+language: generic
+
+addons:
+  apt:
+    sources:
+    - sourceline: "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet/ trusty main"
+      key_url: 
+    packages:
+    - gettext
+    - libcurl4-openssl-dev
+    - libicu-dev
+    - libssl-dev
+    - libunwind8
+    - zlib1g
+
+matrix:
+  include:
+    - os: linux # Ubuntu 14.04
+      dist: trusty
+      sudo: required
+      env:
+        - HTTPLEASE_BUILD_VERSION="beta1"
+        - DOTNET_SDK_URL=https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
+      install:
+        - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
+        - echo "$DOTNET_INSTALL_DIR"
+        - mkdir -p "$DOTNET_INSTALL_DIR"
+        - curl -L "$DOTNET_SDK_URL" | bash
+        - export PATH="$DOTNET_INSTALL_DIR:$PATH"
+
+    - os: osx # OSX 10.11
+      osx_image: xcode7.2
+      env:
+        - HTTPLEASE_BUILD_VERSION="beta1"
+        - DOTNET_SDK_URL=https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.sh
+      install:
+        - brew update
+        - brew install openssl
+        - brew link --force openssl
+        - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
+        - echo "$DOTNET_INSTALL_DIR"
+        - mkdir -p "$DOTNET_INSTALL_DIR"
+        - curl -L "$DOTNET_SDK_URL" | bash
+        - export PATH="$DOTNET_INSTALL_DIR:$PATH"
+
+script:
+  - dotnet --info
+  - echo 'dotnet restore' && echo -en 'travis_fold:start:dotnet_restore'
+  - dotnet restore
+  - echo -en 'travis_fold:end:dotnet_restore'
+  - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_build'
+  - dotnet build "src/VersionManagement" "test/VersionManagement.*Tests"
+  - echo -en 'travis_fold:end:dotnet_build'
+  - echo 'dotnet test' && echo -en 'travis_fold:start:dotnet_test'
+  - dotnet test "test/VersionManagement.*Tests"
+  - echo -en 'travis_fold:end:dotnet_test'
+  - dotnet pack "src/VersionManagement*"

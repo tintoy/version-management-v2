@@ -4,24 +4,19 @@ branches:
   - development/r1.0
   - release/r1.0
 image: Visual Studio 2015
-install:
-- cmd: >-
-    set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-
-    dnvm install 1.0.0-rc1-update2 -r coreclr -arch x64 -nonative
-cache: C:\Users\appveyor\.dnx\packages
+cache:
+- '%USERPROFILE%\.nuget\packages'
 build_script:
 - ps: >-
-    dnvm use 1.0.0-rc1-update2 -r coreclr -arch x64
+    dotnet restore
 
-    dnu restore --quiet
-
-    .\build-all.ps1
+    $buildVersion = "beta1-$($env:APPVEYOR_BUILD_NUMBER.PadLeft(4, '0'))"
+    
+    dotnet build --version-suffix $buildVersion "src/VersionManagement*" "test/VersionManagement*"
 artifacts:
 - path: src\artifacts\packages\Debug\*.nupkg
-test_script:
 - ps: >-
-    .\run-tests.ps1 -Verbose
+    dotnet test $buildVersion "test/HTTPlease*"
 
 deploy_script:
-- cmd: dnu pack .\src\VersionManagement --quiet
+- cmd: dotnet pack --version-suffix $buildVersion "src/VersionManagement*"
