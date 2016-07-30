@@ -54,7 +54,7 @@ script:
   - dotnet restore
   - echo -en 'travis_fold:end:dotnet_restore'
   - echo 'dotnet build' && echo -en 'travis_fold:start:dotnet_build'
-  - dotnet build "src/VersionManagement*" "test/VersionManagement.*Tests"
+  - dotnet build src/VersionManagement* test/VersionManagement.*Tests
   - echo -en 'travis_fold:end:dotnet_build'
   - echo 'dotnet test' && echo -en 'travis_fold:start:dotnet_test'
   - for PRJ in $(ls -d test/VersionManagement.*Tests); do dotnet test $PRJ; done
