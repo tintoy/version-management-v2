@@ -41,11 +41,10 @@ matrix:
       before_install:
         - brew update
 
-        # Hack for Homebrew since it now refuses to link OpenSSL for us.
-        - cp ./build-support/homebrew-hack/link.rb /usr/local/Library/Homebrew/cmd
-        
+        # Explicitly override OpenSSL (newer version required by .NET Core tooling)
         - brew install openssl
-        - brew link --force openssl
+        - ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+        - ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
       install:
         - export DOTNET_INSTALL_DIR="$PWD/.dotnetsdk"
         - echo "$DOTNET_INSTALL_DIR"
